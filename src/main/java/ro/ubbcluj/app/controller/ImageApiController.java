@@ -7,74 +7,25 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ro.ubbcluj.app.DTO.OverlayCategoryDTO;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.io.IOUtils.toByteArray;
 
 @RestController
 @CrossOrigin
-public class TestController {
-
-    @GetMapping("/test")
-    public @ResponseBody String test() {
-        return "TEST";
-
-    }
-
-    @GetMapping(value = "/black")
-    public @ResponseBody ResponseEntity<String> getBlack() throws IOException, InterruptedException {
-
-        // Send the HTTP request
-        HttpClient client = HttpClient.newHttpClient();
-
-        var request = HttpRequest.newBuilder(
-                        URI.create("http://localhost:5000/overlay-image"))
-                .header("accept", "application/json")
-                .build();
-
-    // use the client to send the request
-        var response = client.send(request,  HttpResponse.BodyHandlers.ofString());
-
-    // the response:
-//        System.out.println(response.body());
-
-        int[][][] ints = jsonMaskToArray(response.body());
-
-
-//        int[] array = Arrays.stream(ints)
-//                .flatMap(Arrays::stream)
-//                .flatMapToInt(Arrays::stream)
-//                .toArray();
-
-        String base64 = convertIntArrayToBase64(ints);
-
-
-        return ResponseEntity.ok().body(base64);
-    }
-
-    private byte[] integersToBytes(int[] values) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream(baos);
-        for(int i=0; i < values.length; ++i)
-        {
-            dos.writeInt(values[i]);
-        }
-
-        return baos.toByteArray();
-    }
+public class ImageApiController {
 
     @GetMapping(value = "/image", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<Resource> image() throws IOException {
@@ -93,9 +44,9 @@ public class TestController {
     public ResponseEntity<?> saveImage(@RequestParam("image") MultipartFile multipartFile) throws IOException, InterruptedException {
         byte[] imageBytes = multipartFile.getBytes();
 
-        File file = new File("E:\\Licenta_DOC\\App\\src\\main\\resources\\image\\target.jpg");
+//        File file = new File("E:\\Licenta_DOC\\App\\src\\main\\resources\\image\\target.jpg");
 
-        multipartFile.transferTo(file);
+//        multipartFile.transferTo(file);
 
         // Create a JSON payload with the image content
         String jsonPayload = String.format("{\"content\": %s}", bytesToJsonArray(imageBytes));
@@ -114,13 +65,20 @@ public class TestController {
         HttpClient client = HttpClient.newHttpClient();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        // Print the response
-        System.out.println(response.body());
 
-//        int[][][] ints = jsonMaskToArray(response.body());
+        OverlayCategoryDTO overlayCategoryDTO = jsonMaskToArray(response.body());
 
+//      TODO - parse color_map from json
+        String base64 = convertIntArrayToBase64(overlayCategoryDTO.overlayMap);
+        JSONObject returnResponse = new JSONObject();
+        returnResponse.put("overlay", base64);
+        returnResponse.put("category", overlayCategoryDTO.categoryMap);
+
+        /// Replace CategoryMap with an Array of CategoryObject ( Key, RGB-LIST)
         // Response is a string containing like a serialized json
-        return ResponseEntity.status(HttpStatus.OK).body(response.body());
+
+        /// response them ass strings to parse in javascript
+        return ResponseEntity.status(HttpStatus.OK).body(returnResponse.toString());
     }
 
     public String convertIntArrayToBase64(int[][][] pixelArray) {
@@ -158,11 +116,29 @@ public class TestController {
         return builder.toString();
     }
 
-    private static int[][][] jsonMaskToArray(String jsonToParse){
-        JSONObject json = new JSONObject(jsonToParse);
-// Get the "matrix" array from the JSONObject
-        JSONArray matrixArray = json.getJSONArray("mask");
+    private static OverlayCategoryDTO jsonMaskToArray(String jsonToParse){
+        OverlayCategoryDTO dto = new OverlayCategoryDTO();
 
+        JSONObject json = new JSONObject(jsonToParse);
+        JSONObject color_map = new JSONObject(json.getString("color_map"));
+
+
+        /// keys = category_labels
+        // value - JSONArray of length 3
+
+        /// length isnt cool -> the keys could be 5 10 42 104
+        Map<Integer, List<Integer>> color_labels = new HashMap<>();
+        for (String key: color_map.keySet()) {
+            JSONArray jsonArray = color_map.getJSONArray(key);
+            List<Integer> rgbPixel = jsonArray.toList().stream().map(Integer.class::cast).collect(Collectors.toList());
+            color_labels.put(Integer.parseInt(key), rgbPixel);
+        }
+        dto.categoryMap = color_labels;
+/////////////////////////////////////////////
+
+
+        // Get the "matrix" array from the JSONObject
+        JSONArray matrixArray = json.getJSONArray("mask");
 // Loop through the matrixArray and create a 3D matrix
         int[][][] matrix = new int[matrixArray.length()][][];
         for (int i = 0; i < matrixArray.length(); i++) {
@@ -176,6 +152,7 @@ public class TestController {
                 }
             }
         }
-        return matrix;
+        dto.overlayMap = matrix;
+        return dto;
     }
 }
