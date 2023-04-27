@@ -7,7 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ro.ubbcluj.app.DTO.OverlayCategoryDTO;
+import ro.ubbcluj.app.domain.DTO.OverlayCategoryDTO;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

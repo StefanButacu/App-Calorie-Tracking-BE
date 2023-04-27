@@ -1,4 +1,4 @@
-package ro.ubbcluj.app.DTO;
+package ro.ubbcluj.app.domain.DTO;
 
 import java.util.List;
 import java.util.Map;

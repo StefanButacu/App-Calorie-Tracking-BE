@@ -7,10 +7,10 @@ import java.io.Serializable;
 
 @Embeddable
 public class FoodMealId implements Serializable {
-    @Column(name = "userId")
+    @Column(name = "foodId")
     private Long foodId;
 
-    @Column(name = "projectGroupId")
+    @Column(name = "mealId")
     private Long mealId;
 
     public FoodMealId() {

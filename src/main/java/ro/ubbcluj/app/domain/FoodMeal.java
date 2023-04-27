@@ -11,12 +11,29 @@ public class FoodMeal {
     @EmbeddedId
     private FoodMealId foodMealId;
 
+    private Double quantity;
     public FoodMeal(FoodMealId foodMealId) {
         this.foodMealId = foodMealId;
     }
 
     public FoodMeal() {
 
+    }
+
+    public FoodMealId getFoodMealId() {
+        return foodMealId;
+    }
+
+    public void setFoodMealId(FoodMealId foodMealId) {
+        this.foodMealId = foodMealId;
+    }
+
+    public Double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Double quantity) {
+        this.quantity = quantity;
     }
 }
 
