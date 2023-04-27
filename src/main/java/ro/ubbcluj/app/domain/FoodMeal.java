@@ -20,6 +20,11 @@ public class FoodMeal {
 
     }
 
+    public FoodMeal(FoodMealId foodMealId, Double quantity) {
+        this.foodMealId = foodMealId;
+        this.quantity = quantity;
+    }
+
     public FoodMealId getFoodMealId() {
         return foodMealId;
     }

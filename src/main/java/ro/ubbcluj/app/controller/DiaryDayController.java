@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ro.ubbcluj.app.domain.DiaryDay;
+import ro.ubbcluj.app.domain.dto.DiaryDayMealFoodDTO;
 import ro.ubbcluj.app.service.DiaryDayService;
 
 import java.time.LocalDate;
@@ -24,27 +24,28 @@ public class DiaryDayController {
         this.diaryDayService = diaryDayService;
     }
 
-    @GetMapping("/{date}")
-    public ResponseEntity<?> addDiaryDay( @PathVariable("date") String date) {
+    @PostMapping("/{date}")
+    public ResponseEntity<DiaryDayMealFoodDTO> addDiaryDay( @PathVariable("date") String date) {
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-        DiaryDay diaryDayByDate = diaryDayService.getDiaryDayByDate(localDate);
+        DiaryDayMealFoodDTO diaryDayByDate = diaryDayService.addDiaryDayByDate(localDate);
         return new ResponseEntity<>(diaryDayByDate, HttpStatus.OK);
     }
-
-    @PostMapping("{date}/meal/{meal_id}/food")
-    public ResponseEntity<?> saveFoodToMeal(@PathVariable("date") String date,
-                                            @PathVariable("meal_id") Long mealId,
-                                            @RequestBody Long foodId){
+    @GetMapping("{date}")
+    public ResponseEntity<DiaryDayMealFoodDTO> getDiaryDay( @PathVariable("date") String date) {
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-        // Retrieve day form db
-        DiaryDay diaryDay = diaryDayService.getDiaryDayByDate(localDate);
-        // Add the food to the meal
+        DiaryDayMealFoodDTO diaryDTO = diaryDayService.getDiaryDayMealFoodDTOForDay(localDate);
+        return new ResponseEntity<>(diaryDTO, HttpStatus.OK);
+    }
+    @PostMapping("{diary_day_id}/meal/{meal_id}/food/{food_id}")
+    public ResponseEntity<?> saveFoodToMeal(@PathVariable("diary_day_id") Long diaryDayId,
+                                            @PathVariable("meal_id") Long mealId,
+                                            @PathVariable("food_id") Long foodId){
+        // can be Long diary day id
+        // TODO Create FoodQuantityDTO
+        Double quantity = 3.5;
+        diaryDayService.addFoodToDiary(diaryDayId, mealId, foodId, quantity);
+        // should return something DiaryDayMealFoodDTO maybe
 
-
-        // 1. Retrieve the meal from db
-        // 2. Get the food with foodId from db
-        // 3. Append to the Meal the new food
-        // 4. Store Meal in db
         return new ResponseEntity(HttpStatus.ACCEPTED);
 
     }
