@@ -77,10 +77,11 @@ public class DiaryDayService {
         return getDiaryDayMealFoodDTOForDay(dayDate);
     }
 
-    public void addFoodToDiary(Long diaryDayId, Long mealId, Long foodId, Double quantity) {
+    public void addFoodToDiary( Long mealId, Long foodId, Double quantity) {
         // validate that foodId, mealId, diary day exists
         // update the quantity
-        FoodMeal foodMeal = new FoodMeal(new FoodMealId(foodId, mealId), quantity);
+        FoodMealId foodMealId = new FoodMealId(foodId, mealId);
+        FoodMeal foodMeal = new FoodMeal(foodMealId, quantity);
         foodMealRepository.save(foodMeal);
     }
 }

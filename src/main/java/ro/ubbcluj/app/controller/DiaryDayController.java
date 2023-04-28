@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ro.ubbcluj.app.domain.dto.DiaryDayMealFoodDTO;
+import ro.ubbcluj.app.domain.dto.FoodQuantityDTO;
 import ro.ubbcluj.app.service.DiaryDayService;
 
 import java.time.LocalDate;
@@ -36,14 +37,13 @@ public class DiaryDayController {
         DiaryDayMealFoodDTO diaryDTO = diaryDayService.getDiaryDayMealFoodDTOForDay(localDate);
         return new ResponseEntity<>(diaryDTO, HttpStatus.OK);
     }
-    @PostMapping("{diary_day_id}/meal/{meal_id}/food/{food_id}")
-    public ResponseEntity<?> saveFoodToMeal(@PathVariable("diary_day_id") Long diaryDayId,
+    @PostMapping("meal/{meal_id}/food")
+    public ResponseEntity<?> saveFoodToMeal(
                                             @PathVariable("meal_id") Long mealId,
-                                            @PathVariable("food_id") Long foodId){
+                                            @RequestBody FoodQuantityDTO foodQuantityDTO){
         // can be Long diary day id
         // TODO Create FoodQuantityDTO
-        Double quantity = 3.5;
-        diaryDayService.addFoodToDiary(diaryDayId, mealId, foodId, quantity);
+        diaryDayService.addFoodToDiary(mealId, foodQuantityDTO.getFoodId(), foodQuantityDTO.getQuantity());
         // should return something DiaryDayMealFoodDTO maybe
 
         return new ResponseEntity(HttpStatus.ACCEPTED);
