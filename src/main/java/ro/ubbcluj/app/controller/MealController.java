@@ -11,11 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 public class MealController {
 
-
-
     @PostMapping("/meal/{meal_id}/food")
     public ResponseEntity<?> saveFoodToMeal(@PathVariable("meal_id") Long mealId,@RequestBody Long foodId){
-
 
         // 1. Retrieve the meal from db
         // 2. Get the food with foodId from db
