@@ -43,14 +43,16 @@ public class DiaryDayService {
                         .stream().map(food -> {
                             Double quantity = foodMealRepository.findById(new FoodMealId(food.getId(), meal.getId())).get().getQuantity();
                             return new FoodWithCalorieDTO(food.getId(), food.getName(), quantity, foodService.calculateCaloriesForFood(food.getId(), quantity));
-                        }).collect(Collectors.toList());
+                        }).toList();
                 mealFoodDTOS.add(new MealFoodDTO(meal.getId(), meal.getName(), foodsForMeal));
             });
             diaryDayMealFoodDTO.setMealDTOList(mealFoodDTOS);
             diaryDayMealFoodDTO.setDiaryDay(diaryDay.getDay().toString());
             diaryDayMealFoodDTO.setDiaryDayId(diaryDay.getId());
+            return diaryDayMealFoodDTO;
         }
-        return diaryDayMealFoodDTO;
+        else
+            return addDiaryDayByDate(dayDate);
     }
 
 
