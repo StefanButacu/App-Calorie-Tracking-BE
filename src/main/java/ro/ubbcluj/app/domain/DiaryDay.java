@@ -12,7 +12,7 @@ public class DiaryDay {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
+// TODO - add @OneToMany to meal
     private LocalDate day;
 
     public void setId(Long id) {

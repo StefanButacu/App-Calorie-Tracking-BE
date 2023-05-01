@@ -3,6 +3,8 @@ package ro.ubbcluj.app.service;
 import org.springframework.stereotype.Service;
 import ro.ubbcluj.app.domain.*;
 import ro.ubbcluj.app.domain.dto.DiaryDayMealFoodDTO;
+import ro.ubbcluj.app.domain.dto.FoodQuantityDTO;
+import ro.ubbcluj.app.domain.dto.FoodWithCalorieDTO;
 import ro.ubbcluj.app.domain.dto.MealFoodDTO;
 import ro.ubbcluj.app.repository.*;
 
@@ -10,6 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class DiaryDayService {
@@ -19,12 +22,15 @@ public class DiaryDayService {
     private final FoodRepository foodRepository;
     private final FoodMealRepository foodMealRepository;
 
-    public DiaryDayService(DiaryDayRepository diaryDayRepository, MealRepository mealRepository, DiaryDayMealRepository diaryDayMealRepository, FoodRepository foodRepository, FoodMealRepository foodMealRepository) {
+    private final FoodService foodService;
+
+    public DiaryDayService(DiaryDayRepository diaryDayRepository, MealRepository mealRepository, DiaryDayMealRepository diaryDayMealRepository, FoodRepository foodRepository, FoodMealRepository foodMealRepository, FoodService foodService) {
         this.diaryDayRepository = diaryDayRepository;
         this.mealRepository = mealRepository;
         this.diaryDayMealRepository = diaryDayMealRepository;
         this.foodRepository = foodRepository;
         this.foodMealRepository = foodMealRepository;
+        this.foodService = foodService;
     }
 
     public DiaryDayMealFoodDTO getDiaryDayMealFoodDTOForDay(LocalDate dayDate) {
@@ -43,7 +49,11 @@ public class DiaryDayService {
             List<Meal> meals = mealRepository.getMealsFromDiary(diaryDay.getId());
             List<MealFoodDTO> mealFoodDTOS = new ArrayList<>();
             meals.forEach(meal -> {
-                List<Food> foodsForMeal = foodRepository.getFoodsForMeal(meal.getId());
+                List<FoodWithCalorieDTO> foodsForMeal = foodRepository.getFoodsForMeal(meal.getId())
+                        .stream().map(food -> {
+                            Double quantity = foodMealRepository.findById(new FoodMealId(food.getId(), meal.getId())).get().getQuantity();
+                            return new FoodWithCalorieDTO(food.getId(), food.getName(), quantity, foodService.calculateCaloriesForFood(food.getId(), quantity));
+                        }).collect(Collectors.toList());
                 mealFoodDTOS.add(new MealFoodDTO(meal.getId(), meal.getName(), foodsForMeal));
             });
             diaryDayMealFoodDTO.setMealDTOList(mealFoodDTOS);
@@ -52,6 +62,8 @@ public class DiaryDayService {
         }
         return diaryDayMealFoodDTO;
     }
+
+
 
     public DiaryDayMealFoodDTO addDiaryDayByDate(LocalDate dayDate) {
         Optional<DiaryDay> diaryDayByDay = diaryDayRepository.getDiaryDayByDay(dayDate);

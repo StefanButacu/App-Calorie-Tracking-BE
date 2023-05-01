@@ -9,12 +9,12 @@ public class MealFoodDTO {
     private Long mealId;
     private String mealName;
 
-    private List<Food> foodList;
+    private List<FoodWithCalorieDTO> foodList;
 
     public MealFoodDTO() {
     }
 
-    public MealFoodDTO(Long mealId, String mealName, List<Food> foodList) {
+    public MealFoodDTO(Long mealId, String mealName, List<FoodWithCalorieDTO> foodList) {
         this.mealId = mealId;
         this.mealName = mealName;
         this.foodList = foodList;
@@ -36,11 +36,11 @@ public class MealFoodDTO {
         this.mealName = mealName;
     }
 
-    public List<Food> getFoodList() {
+    public List<FoodWithCalorieDTO> getFoodList() {
         return foodList;
     }
 
-    public void setFoodList(List<Food> foodList) {
+    public void setFoodList(List<FoodWithCalorieDTO> foodList) {
         this.foodList = foodList;
     }
 }
