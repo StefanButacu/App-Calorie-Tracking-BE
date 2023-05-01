@@ -12,8 +12,19 @@ public class DiaryDay {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-// TODO - add @OneToMany to meal
+
+    @OneToMany(mappedBy = "diaryDay", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Meal> meals;
     private LocalDate day;
+
+    public DiaryDay() {
+    }
+
+    public DiaryDay(Long id, List<Meal> meals, LocalDate day) {
+        this.id = id;
+        this.meals = meals;
+        this.day = day;
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -29,5 +40,13 @@ public class DiaryDay {
 
     public void setDay(LocalDate day) {
         this.day = day;
+    }
+
+    public List<Meal> getMeals() {
+        return meals;
+    }
+
+    public void setMeals(List<Meal> meals) {
+        this.meals = meals;
     }
 }

@@ -3,7 +3,6 @@ package ro.ubbcluj.app.service;
 import org.springframework.stereotype.Service;
 import ro.ubbcluj.app.domain.*;
 import ro.ubbcluj.app.domain.dto.DiaryDayMealFoodDTO;
-import ro.ubbcluj.app.domain.dto.FoodQuantityDTO;
 import ro.ubbcluj.app.domain.dto.FoodWithCalorieDTO;
 import ro.ubbcluj.app.domain.dto.MealFoodDTO;
 import ro.ubbcluj.app.repository.*;
@@ -18,29 +17,20 @@ import java.util.stream.Collectors;
 public class DiaryDayService {
     private final DiaryDayRepository diaryDayRepository;
     private final MealRepository mealRepository;
-    private final DiaryDayMealRepository diaryDayMealRepository;
     private final FoodRepository foodRepository;
     private final FoodMealRepository foodMealRepository;
 
     private final FoodService foodService;
 
-    public DiaryDayService(DiaryDayRepository diaryDayRepository, MealRepository mealRepository, DiaryDayMealRepository diaryDayMealRepository, FoodRepository foodRepository, FoodMealRepository foodMealRepository, FoodService foodService) {
+    public DiaryDayService(DiaryDayRepository diaryDayRepository, MealRepository mealRepository, FoodRepository foodRepository, FoodMealRepository foodMealRepository, FoodService foodService) {
         this.diaryDayRepository = diaryDayRepository;
         this.mealRepository = mealRepository;
-        this.diaryDayMealRepository = diaryDayMealRepository;
         this.foodRepository = foodRepository;
         this.foodMealRepository = foodMealRepository;
         this.foodService = foodService;
     }
 
     public DiaryDayMealFoodDTO getDiaryDayMealFoodDTOForDay(LocalDate dayDate) {
-        // get the diary day
-        // for the day get the mealsDTO
-        // for each mealDTO get the foodsDTO
-        //
-        // {
-        //
-        // }
         DiaryDayMealFoodDTO diaryDayMealFoodDTO = new DiaryDayMealFoodDTO();
         Optional<DiaryDay> diaryDayByDay = diaryDayRepository.getDiaryDayByDay(dayDate);
         if (diaryDayByDay.isPresent()) {
@@ -71,20 +61,11 @@ public class DiaryDayService {
             DiaryDay newDiaryDay = new DiaryDay(); // Factory get diary day based on user preference
             newDiaryDay.setDay(dayDate);
             // add meals
-            Meal meal1 = new Meal(); meal1.setName("Breakfast");
-            Meal meal2 = new Meal(); meal2.setName("Lunch");
-            Meal meal3 = new Meal(); meal3.setName("Dinner");
-            meal1 = mealRepository.save(meal1);
-            meal2 = mealRepository.save(meal2);
-            meal3 = mealRepository.save(meal3);
-            newDiaryDay = diaryDayRepository.save(newDiaryDay);
-            DiaryDayMealId diaryDayMealId1 = new DiaryDayMealId(newDiaryDay.getId(), meal1.getId());
-            DiaryDayMealId diaryDayMealId2 = new DiaryDayMealId(newDiaryDay.getId(), meal2.getId());
-            DiaryDayMealId diaryDayMealId3 = new DiaryDayMealId(newDiaryDay.getId(), meal3.getId());
-            DiaryDayMeal diaryDayMeal1 = new DiaryDayMeal(diaryDayMealId1);
-            DiaryDayMeal diaryDayMeal2 = new DiaryDayMeal(diaryDayMealId2);
-            DiaryDayMeal diaryDayMeal3 = new DiaryDayMeal(diaryDayMealId3);
-            diaryDayMealRepository.saveAll(List.of(diaryDayMeal1, diaryDayMeal2, diaryDayMeal3));
+            Meal meal1 = new Meal(); meal1.setName("Breakfast") ; meal1.setDiaryDay(newDiaryDay);
+            Meal meal2 = new Meal(); meal2.setName("Lunch"); meal2.setDiaryDay(newDiaryDay);
+            Meal meal3 = new Meal(); meal3.setName("Dinner"); meal3.setDiaryDay(newDiaryDay);
+            newDiaryDay.setMeals(List.of(meal1, meal2, meal3));
+             diaryDayRepository.save(newDiaryDay);
         }
         return getDiaryDayMealFoodDTOForDay(dayDate);
     }

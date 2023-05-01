@@ -10,10 +10,8 @@ import java.util.List;
 
 @Repository
 public interface MealRepository extends JpaRepository<Meal, Long> {
-    @Query(value = "select m from Meal m " +
-            "left join DiaryDayMeal ddm on ddm.diaryDayMealId.mealId = m.id " +
-            "left join DiaryDay dd on ddm.diaryDayMealId.diaryDayId = dd.id " +
-            "where dd.id = :diaryDayId " )
+    @Query(value = "select d.meals from DiaryDay d " +
+                "join d.meals where d.id = :diaryDayId")
     List<Meal> getMealsFromDiary(@Param("diaryDayId") Long diaryDayId);
 
 }

@@ -41,12 +41,8 @@ public class DiaryDayController {
     public ResponseEntity<?> saveFoodToMeal(
                                             @PathVariable("meal_id") Long mealId,
                                             @RequestBody FoodQuantityDTO foodQuantityDTO){
-        // can be Long diary day id
-        // TODO Create FoodQuantityDTO
         diaryDayService.addFoodToDiary(mealId, foodQuantityDTO.getFoodId(), foodQuantityDTO.getQuantity());
         // should return something DiaryDayMealFoodDTO maybe
-
         return new ResponseEntity(HttpStatus.ACCEPTED);
-
     }
 }
