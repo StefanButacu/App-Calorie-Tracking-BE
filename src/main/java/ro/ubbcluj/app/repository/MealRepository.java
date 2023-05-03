@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import ro.ubbcluj.app.domain.Meal;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MealRepository extends JpaRepository<Meal, Long> {

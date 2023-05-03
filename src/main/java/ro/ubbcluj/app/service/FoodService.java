@@ -1,6 +1,8 @@
 package ro.ubbcluj.app.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ro.ubbcluj.app.domain.CALORIE_VALUE;
 import ro.ubbcluj.app.domain.Food;
@@ -28,5 +30,9 @@ public class FoodService {
         return (long) Math.floor(CALORIE_VALUE.PROTEIN.getCalorie() * food.getProtein() * quantity / HUNDRED +
                 CALORIE_VALUE.CARBOHYDRATE.getCalorie() * food.getCarbohydrate() * quantity / HUNDRED +
                 CALORIE_VALUE.LIPID.getCalorie() * food.getLipid() * quantity / HUNDRED);
+    }
+
+    public Page<Food> getFoods(Pageable pageable) {
+        return foodRepository.findAll(pageable);
     }
 }

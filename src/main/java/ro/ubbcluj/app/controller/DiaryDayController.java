@@ -11,7 +11,7 @@ import ro.ubbcluj.app.service.DiaryDayService;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/diary")
 public class DiaryDayController {
@@ -33,6 +33,7 @@ public class DiaryDayController {
     @GetMapping("{date}")
     public ResponseEntity<DiaryDayMealFoodDTO> getDiaryDay( @PathVariable("date") String date) {
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+        // Return a diary with meals (0, 1, 2... n)
         DiaryDayMealFoodDTO diaryDTO = diaryDayService.getDiaryDayMealFoodDTOForDay(localDate);
         return new ResponseEntity<>(diaryDTO, HttpStatus.OK);
     }

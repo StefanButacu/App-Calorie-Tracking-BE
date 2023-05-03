@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import static org.apache.commons.io.IOUtils.toByteArray;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class ImageApiController {
 
     @GetMapping(value = "/image", produces = MediaType.IMAGE_JPEG_VALUE)

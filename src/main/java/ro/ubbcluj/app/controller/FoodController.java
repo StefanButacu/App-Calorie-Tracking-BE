@@ -2,6 +2,9 @@ package ro.ubbcluj.app.controller;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,8 +12,10 @@ import ro.ubbcluj.app.domain.Food;
 import ro.ubbcluj.app.domain.dto.FoodDetailsDTO;
 import ro.ubbcluj.app.service.FoodService;
 
+import java.util.List;
+
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/food")
 public class FoodController {
 
@@ -30,4 +35,11 @@ public class FoodController {
         return new ResponseEntity<>(modelMapper.map(food, FoodDetailsDTO.class), HttpStatus.OK);
     }
 
+    @GetMapping("/foods")
+    public ResponseEntity<List<FoodDetailsDTO>> getFoods(@PageableDefault(size = 20) Pageable pageable) {
+//        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+        Page<Food> foods = foodService.getFoods(pageable);
+        List<FoodDetailsDTO> foodDetailsDTOS = foods.map(food -> modelMapper.map(food, FoodDetailsDTO.class)).stream().toList();
+        return ResponseEntity.ok(foodDetailsDTOS);
+    }
 }
