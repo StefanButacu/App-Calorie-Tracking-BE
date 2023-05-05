@@ -8,6 +8,8 @@ import ro.ubbcluj.app.domain.CALORIE_VALUE;
 import ro.ubbcluj.app.domain.Food;
 import ro.ubbcluj.app.repository.FoodRepository;
 
+import java.util.List;
+
 @Service
 public class FoodService {
 
@@ -32,7 +34,10 @@ public class FoodService {
                 CALORIE_VALUE.LIPID.getCalorie() * food.getLipid() * quantity / HUNDRED);
     }
 
-    public Page<Food> getFoods(Pageable pageable) {
+    public List<Food> getFoodsByName(String foodName) {
+        return foodRepository.findAllByName(foodName);
+    }
+    public Page<Food> getFoodsByPage(Pageable pageable) {
         return foodRepository.findAll(pageable);
     }
 }

@@ -1,5 +1,6 @@
 package ro.ubbcluj.app.controller;
 
+import io.micrometer.common.util.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,9 +38,17 @@ public class FoodController {
 
     @GetMapping("/foods")
     public ResponseEntity<List<FoodDetailsDTO>> getFoods(@PageableDefault(size = 20) Pageable pageable) {
-//        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
-        Page<Food> foods = foodService.getFoods(pageable);
+        Page<Food> foods;
+        foods = foodService.getFoodsByPage(pageable);
         List<FoodDetailsDTO> foodDetailsDTOS = foods.map(food -> modelMapper.map(food, FoodDetailsDTO.class)).stream().toList();
         return ResponseEntity.ok(foodDetailsDTOS);
     }
+
+    @GetMapping("/foods/search")
+    public ResponseEntity<List<FoodDetailsDTO>> getFoodsByName(@RequestParam(value = "name") String foodName) {
+        List<Food> foods = foodService.getFoodsByName(foodName);
+        List<FoodDetailsDTO> foodDetailsDTOS = foods.stream().map(food -> modelMapper.map(food, FoodDetailsDTO.class)).toList();
+        return ResponseEntity.ok(foodDetailsDTOS);
+    }
+
 }

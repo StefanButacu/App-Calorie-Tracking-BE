@@ -1,5 +1,7 @@
 package ro.ubbcluj.app.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,4 +22,6 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
             "left join Meal m on fm.foodMealId.mealId = m.id " +
             "where m.id = :mealId " )
     List<Food> getFoodsForMeal(@Param("mealId") Long mealId);
+    @Query("SELECT f FROM Food f WHERE lower(f.name) LIKE lower(concat('%', :foodName, '%'))")
+    List<Food> findAllByName(@Param("foodName") String foodName);
 }
