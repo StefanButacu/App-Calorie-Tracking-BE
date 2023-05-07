@@ -6,42 +6,42 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.ubbcluj.app.domain.dto.DiaryDayMealFoodDTO;
 import ro.ubbcluj.app.domain.dto.FoodQuantityDTO;
+import ro.ubbcluj.app.repository.FoodMealRepository;
 import ro.ubbcluj.app.service.DiaryDayService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/diary")
 public class DiaryDayController {
 
-
     private final DiaryDayService diaryDayService;
 
+    private final FoodMealRepository foodMealRepository;
+
     @Autowired
-    public DiaryDayController(DiaryDayService diaryDayService) {
+    public DiaryDayController(DiaryDayService diaryDayService, FoodMealRepository foodMealRepository) {
         this.diaryDayService = diaryDayService;
+        this.foodMealRepository = foodMealRepository;
     }
 
-    @PostMapping("/{date}")
-    public ResponseEntity<DiaryDayMealFoodDTO> addDiaryDay( @PathVariable("date") String date) {
-        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-        DiaryDayMealFoodDTO diaryDayByDate = diaryDayService.addDiaryDayByDate(localDate);
-        return new ResponseEntity<>(diaryDayByDate, HttpStatus.OK);
-    }
     @GetMapping("{date}")
-    public ResponseEntity<DiaryDayMealFoodDTO> getDiaryDay( @PathVariable("date") String date) {
+    public ResponseEntity<?> getDiaryDay(@PathVariable("date") String date) {
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-        // Return a diary with meals (0, 1, 2... n)
-        DiaryDayMealFoodDTO diaryDTO = diaryDayService.getDiaryDayMealFoodDTOForDay(localDate);
-        return new ResponseEntity<>(diaryDTO, HttpStatus.OK);
+        DiaryDayMealFoodDTO diaryDayMealFoodDTOForDay = diaryDayService.getDiaryDayMealFoodDTOForDay(localDate);
+        return new ResponseEntity<>(diaryDayMealFoodDTOForDay, HttpStatus.OK);
     }
+
     @PostMapping("meal/{meal_id}/food")
     public ResponseEntity<?> saveFoodToMeal(
-                                            @PathVariable("meal_id") Long mealId,
-                                            @RequestBody FoodQuantityDTO foodQuantityDTO){
-        diaryDayService.addFoodToDiary(mealId, foodQuantityDTO.getFoodId(), foodQuantityDTO.getQuantity());
+            @PathVariable("meal_id") Long mealId,
+            @RequestBody FoodQuantityDTO foodQuantityDTO) {
+        LocalDate localDate = LocalDate.parse(new Date().toString(), DateTimeFormatter.ISO_LOCAL_DATE);
+
+        diaryDayService.addFoodToDiary(localDate,mealId, foodQuantityDTO.getFoodId(), foodQuantityDTO.getQuantity());
         // should return something DiaryDayMealFoodDTO maybe
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }

@@ -11,8 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface MealRepository extends JpaRepository<Meal, Long> {
-    @Query(value = "select d.meals from DiaryDay d " +
-                "join d.meals where d.id = :diaryDayId")
-    List<Meal> getMealsFromDiary(@Param("diaryDayId") Long diaryDayId);
+
+//    List<Meal> getMealsFromDiary(@Param("diaryDayId") Long diaryDayId);
 
 }

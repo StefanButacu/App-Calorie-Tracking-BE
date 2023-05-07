@@ -1,4 +1,4 @@
-package ro.ubbcluj.app;
+package ro.ubbcluj.app.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

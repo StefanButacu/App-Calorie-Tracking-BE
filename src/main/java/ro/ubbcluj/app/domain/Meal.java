@@ -14,9 +14,9 @@ public class Meal {
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "diaryDayId")
-    private DiaryDay diaryDay;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "diaryDayId")
+//    private DiaryDay diaryDay;
 
     public String getName() {
         return name;
@@ -34,11 +34,11 @@ public class Meal {
         return id;
     }
 
-    public DiaryDay getDiaryDay() {
-        return diaryDay;
-    }
-
-    public void setDiaryDay(DiaryDay diaryDay) {
-        this.diaryDay = diaryDay;
-    }
+//    public DiaryDay getDiaryDay() {
+//        return diaryDay;
+//    }
+//
+//    public void setDiaryDay(DiaryDay diaryDay) {
+//        this.diaryDay = diaryDay;
+//    }
 }

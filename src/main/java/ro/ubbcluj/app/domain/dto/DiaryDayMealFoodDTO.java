@@ -4,25 +4,15 @@ import java.util.List;
 
 public class DiaryDayMealFoodDTO {
 
-    private Long diaryDayId;
     private String diaryDay;
     private List<MealFoodDTO> mealDTOList;
 
     public DiaryDayMealFoodDTO() {
     }
 
-    public DiaryDayMealFoodDTO(String diaryDay, List<MealFoodDTO> mealDTOList, Long diaryDayId) {
-        this.diaryDayId = diaryDayId;
+    public DiaryDayMealFoodDTO(String diaryDay, List<MealFoodDTO> mealDTOList) {
         this.diaryDay = diaryDay;
         this.mealDTOList = mealDTOList;
-    }
-
-    public Long getDiaryDayId() {
-        return diaryDayId;
-    }
-
-    public void setDiaryDayId(Long diaryDayId) {
-        this.diaryDayId = diaryDayId;
     }
 
     public String getDiaryDay() {

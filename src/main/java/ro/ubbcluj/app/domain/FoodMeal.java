@@ -1,8 +1,7 @@
 package ro.ubbcluj.app.domain;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.springframework.context.annotation.Primary;
 
 @Entity
 @Table(name = "food_meal")
@@ -12,6 +11,13 @@ public class FoodMeal {
     private FoodMealId foodMealId;
 
     private Double quantity;
+
+    @ManyToOne
+    @MapsId("userId")
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
     public FoodMeal(FoodMealId foodMealId) {
         this.foodMealId = foodMealId;
     }
@@ -20,9 +26,10 @@ public class FoodMeal {
 
     }
 
-    public FoodMeal(FoodMealId foodMealId, Double quantity) {
+    public FoodMeal(FoodMealId foodMealId, Double quantity, User user) {
         this.foodMealId = foodMealId;
         this.quantity = quantity;
+        this.user = user;
     }
 
     public FoodMealId getFoodMealId() {

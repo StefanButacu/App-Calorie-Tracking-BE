@@ -5,78 +5,71 @@ import ro.ubbcluj.app.domain.*;
 import ro.ubbcluj.app.domain.dto.DiaryDayMealFoodDTO;
 import ro.ubbcluj.app.domain.dto.FoodWithCalorieDTO;
 import ro.ubbcluj.app.domain.dto.MealFoodDTO;
-import ro.ubbcluj.app.repository.*;
+import ro.ubbcluj.app.repository.FoodMealRepository;
+import ro.ubbcluj.app.repository.FoodRepository;
+import ro.ubbcluj.app.repository.MealRepository;
+import ro.ubbcluj.app.repository.UserRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class DiaryDayService {
-    private final DiaryDayRepository diaryDayRepository;
     private final MealRepository mealRepository;
     private final FoodRepository foodRepository;
     private final FoodMealRepository foodMealRepository;
 
+    private final UserRepository userRepository;
     private final FoodService foodService;
+    private final Long USER_ID = 1L;
 
-    public DiaryDayService(DiaryDayRepository diaryDayRepository, MealRepository mealRepository, FoodRepository foodRepository, FoodMealRepository foodMealRepository, FoodService foodService) {
-        this.diaryDayRepository = diaryDayRepository;
+    public DiaryDayService(MealRepository mealRepository, FoodRepository foodRepository, FoodMealRepository foodMealRepository, UserRepository userRepository, FoodService foodService) {
         this.mealRepository = mealRepository;
         this.foodRepository = foodRepository;
         this.foodMealRepository = foodMealRepository;
+        this.userRepository = userRepository;
         this.foodService = foodService;
     }
 
     public DiaryDayMealFoodDTO getDiaryDayMealFoodDTOForDay(LocalDate dayDate) {
-        DiaryDayMealFoodDTO diaryDayMealFoodDTO = new DiaryDayMealFoodDTO();
-        Optional<DiaryDay> diaryDayByDay = diaryDayRepository.getDiaryDayByDay(dayDate);
-        if (diaryDayByDay.isPresent()) {
-            // get meals for diary
-            DiaryDay diaryDay = diaryDayByDay.get();
-            List<Meal> meals = mealRepository.getMealsFromDiary(diaryDay.getId());
-            List<MealFoodDTO> mealFoodDTOS = new ArrayList<>();
-            meals.forEach(meal -> {
-                List<FoodWithCalorieDTO> foodsForMeal = foodRepository.getFoodsForMeal(meal.getId())
-                        .stream().map(food -> {
-                            Double quantity = foodMealRepository.findById(new FoodMealId(food.getId(), meal.getId())).get().getQuantity();
-                            return new FoodWithCalorieDTO(food.getId(), food.getName(), quantity, foodService.calculateCaloriesForFood(food.getId(), quantity));
-                        }).toList();
-                mealFoodDTOS.add(new MealFoodDTO(meal.getId(), meal.getName(), foodsForMeal));
-            });
-            diaryDayMealFoodDTO.setMealDTOList(mealFoodDTOS);
-            diaryDayMealFoodDTO.setDiaryDay(diaryDay.getDay().toString());
-            diaryDayMealFoodDTO.setDiaryDayId(diaryDay.getId());
-            return diaryDayMealFoodDTO;
+        List<FoodMeal> foodMeals = foodMealRepository.getFoodMealsByDayAndUser(dayDate, USER_ID);
+        DiaryDayMealFoodDTO dto = new DiaryDayMealFoodDTO();
+        dto.setDiaryDay(dayDate.toString());
+        List<MealFoodDTO> mealFoodDTOS = new ArrayList<>();
+
+        // can get all meals for this user
+        // TODO - create a relation between user and meals
+        // u1 - 0, 1, 2
+        // u2 - 3, 4 , 5 ,6 7 - this one has 5 meals/day
+        List<Meal> allMeals = mealRepository.findAll();
+        for(Meal dbMeal: allMeals){
+            MealFoodDTO mealFoodDTO = new MealFoodDTO();
+            mealFoodDTO.setMealName(dbMeal.getName());
+            mealFoodDTO.setMealId(dbMeal.getId());
+            List<FoodWithCalorieDTO> foodWithCalorieDTOS = new ArrayList<>();
+            for(FoodMeal foodMeal: foodMeals) {
+                if(dbMeal.getId().equals(foodMeal.getFoodMealId().getMealId())) {
+                    Food food = foodRepository.findById(foodMeal.getFoodMealId().getFoodId()).get();
+                    foodWithCalorieDTOS.add( new FoodWithCalorieDTO(food.getId(), food.getName(), foodMeal.getQuantity(), foodService.calculateCaloriesForFood(food.getId(), foodMeal.getQuantity())));
+                }
+            }
+            mealFoodDTO.setFoodList(foodWithCalorieDTOS);
+            mealFoodDTOS.add(mealFoodDTO);
         }
-        else
-            return addDiaryDayByDate(dayDate);
+        dto.setMealDTOList(mealFoodDTOS);
+        return dto;
+
     }
 
-
-
-    public DiaryDayMealFoodDTO addDiaryDayByDate(LocalDate dayDate) {
-        Optional<DiaryDay> diaryDayByDay = diaryDayRepository.getDiaryDayByDay(dayDate);
-        if (diaryDayByDay.isEmpty()) {
-            DiaryDay newDiaryDay = new DiaryDay(); // Factory get diary day based on user preference
-            newDiaryDay.setDay(dayDate);
-            // add meals
-            Meal meal1 = new Meal(); meal1.setName("Breakfast") ; meal1.setDiaryDay(newDiaryDay);
-            Meal meal2 = new Meal(); meal2.setName("Lunch"); meal2.setDiaryDay(newDiaryDay);
-            Meal meal3 = new Meal(); meal3.setName("Dinner"); meal3.setDiaryDay(newDiaryDay);
-            newDiaryDay.setMeals(List.of(meal1, meal2, meal3));
-             diaryDayRepository.save(newDiaryDay);
-        }
-        return getDiaryDayMealFoodDTOForDay(dayDate);
-    }
-
-    public void addFoodToDiary( Long mealId, Long foodId, Double quantity) {
+    public void addFoodToDiary(LocalDate dayDate, Long mealId, Long foodId, Double quantity) {
         // validate that foodId, mealId, diary day exists
         // update the quantity
-        FoodMealId foodMealId = new FoodMealId(foodId, mealId);
-        FoodMeal foodMeal = new FoodMeal(foodMealId, quantity);
+        FoodMealId foodMealId = new FoodMealId(foodId, mealId, dayDate, USER_ID);
+        // get the User
+        User user = userRepository.findById(USER_ID).get();
+
+        FoodMeal foodMeal = new FoodMeal(foodMealId, quantity, user);
         foodMealRepository.save(foodMeal);
     }
 }

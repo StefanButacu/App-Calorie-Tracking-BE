@@ -22,7 +22,7 @@ public class MealController {
     }
 
     @GetMapping("/{meal_id}")
-    public ResponseEntity<?> findFoodById(@PathVariable("meal_id") Long mealId) {
+    public ResponseEntity<?> findMealById(@PathVariable("meal_id") Long mealId) {
         Meal meal = mealService.findMealById(mealId);
         if (meal == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
