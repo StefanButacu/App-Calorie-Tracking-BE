@@ -1,17 +1,17 @@
 package ro.ubbcluj.app.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.ubbcluj.app.domain.dto.DiaryDayMealFoodDTO;
 import ro.ubbcluj.app.domain.dto.FoodQuantityDTO;
-import ro.ubbcluj.app.repository.FoodMealRepository;
 import ro.ubbcluj.app.service.DiaryDayService;
+import ro.ubbcluj.app.service.JwtTokenService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -19,29 +19,37 @@ import java.util.Date;
 public class DiaryDayController {
 
     private final DiaryDayService diaryDayService;
-
-    private final FoodMealRepository foodMealRepository;
+    private final JwtTokenService jwtTokenService;
 
     @Autowired
-    public DiaryDayController(DiaryDayService diaryDayService, FoodMealRepository foodMealRepository) {
+    public DiaryDayController(DiaryDayService diaryDayService, JwtTokenService jwtTokenService) {
         this.diaryDayService = diaryDayService;
-        this.foodMealRepository = foodMealRepository;
+        this.jwtTokenService = jwtTokenService;
     }
 
     @GetMapping("{date}")
-    public ResponseEntity<?> getDiaryDay(@PathVariable("date") String date) {
+    public ResponseEntity<?> getDiaryDay(HttpServletRequest request, @PathVariable("date") String date) {
+        String token = request.getHeader("Authorization");
+        if (token == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        Long userId = Long.parseLong(jwtTokenService.extractId(token.substring(7)));
+
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-        DiaryDayMealFoodDTO diaryDayMealFoodDTOForDay = diaryDayService.getDiaryDayMealFoodDTOForDay(localDate);
+        DiaryDayMealFoodDTO diaryDayMealFoodDTOForDay = diaryDayService.getDiaryDayMealFoodDTOForDay(localDate, userId);
         return new ResponseEntity<>(diaryDayMealFoodDTOForDay, HttpStatus.OK);
     }
 
-    @PostMapping("meal/{meal_id}/food")
-    public ResponseEntity<?> saveFoodToMeal(
-            @PathVariable("meal_id") Long mealId,
-            @RequestBody FoodQuantityDTO foodQuantityDTO) {
-        LocalDate localDate = LocalDate.parse(new Date().toString(), DateTimeFormatter.ISO_LOCAL_DATE);
+    @PostMapping("{date}/meal/{meal_id}/food")
+    public ResponseEntity<?> saveFoodToMeal(HttpServletRequest request,
+                                            @PathVariable("meal_id") Long mealId, @PathVariable("date") String date, @RequestBody FoodQuantityDTO foodQuantityDTO) {
 
-        diaryDayService.addFoodToDiary(localDate,mealId, foodQuantityDTO.getFoodId(), foodQuantityDTO.getQuantity());
+        String token = request.getHeader("Authorization");
+        if (token == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        Long userId = Long.parseLong(jwtTokenService.extractId(token.substring(7)));
+
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+        diaryDayService.addFoodToDiary(localDate, mealId, foodQuantityDTO.getFoodId(), foodQuantityDTO.getQuantity(), userId);
         // should return something DiaryDayMealFoodDTO maybe
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }

@@ -32,8 +32,8 @@ public class DiaryDayService {
         this.foodService = foodService;
     }
 
-    public DiaryDayMealFoodDTO getDiaryDayMealFoodDTOForDay(LocalDate dayDate) {
-        List<FoodMeal> foodMeals = foodMealRepository.getFoodMealsByDayAndUser(dayDate, USER_ID);
+    public DiaryDayMealFoodDTO getDiaryDayMealFoodDTOForDay(LocalDate dayDate, Long userId) {
+        List<FoodMeal> foodMeals = foodMealRepository.getFoodMealsByDayAndUser(dayDate, userId);
         DiaryDayMealFoodDTO dto = new DiaryDayMealFoodDTO();
         dto.setDiaryDay(dayDate.toString());
         List<MealFoodDTO> mealFoodDTOS = new ArrayList<>();
@@ -62,10 +62,10 @@ public class DiaryDayService {
 
     }
 
-    public void addFoodToDiary(LocalDate dayDate, Long mealId, Long foodId, Double quantity) {
+    public void addFoodToDiary(LocalDate dayDate, Long mealId, Long foodId, Double quantity, Long userId) {
         // validate that foodId, mealId, diary day exists
         // update the quantity
-        FoodMealId foodMealId = new FoodMealId(foodId, mealId, dayDate, USER_ID);
+        FoodMealId foodMealId = new FoodMealId(foodId, mealId, dayDate, userId);
         // get the User
         User user = userRepository.findById(USER_ID).get();
 

@@ -1,6 +1,6 @@
 package ro.ubbcluj.app.controller;
 
-import io.micrometer.common.util.StringUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import ro.ubbcluj.app.domain.Food;
 import ro.ubbcluj.app.domain.dto.FoodDetailsDTO;
 import ro.ubbcluj.app.service.FoodService;
+import ro.ubbcluj.app.service.JwtTokenService;
 
 import java.util.List;
 
