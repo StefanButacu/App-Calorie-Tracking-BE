@@ -22,7 +22,6 @@ public class DiaryDayService {
 
     private final UserRepository userRepository;
     private final FoodService foodService;
-    private final Long USER_ID = 1L;
 
     public DiaryDayService(MealRepository mealRepository, FoodRepository foodRepository, FoodMealRepository foodMealRepository, UserRepository userRepository, FoodService foodService) {
         this.mealRepository = mealRepository;
@@ -67,7 +66,7 @@ public class DiaryDayService {
         // update the quantity
         FoodMealId foodMealId = new FoodMealId(foodId, mealId, dayDate, userId);
         // get the User
-        User user = userRepository.findById(USER_ID).get();
+        User user = userRepository.findById(userId).get();
 
         FoodMeal foodMeal = new FoodMeal(foodMealId, quantity, user);
         foodMealRepository.save(foodMeal);
