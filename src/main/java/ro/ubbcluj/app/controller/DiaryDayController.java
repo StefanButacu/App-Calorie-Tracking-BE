@@ -32,7 +32,8 @@ public class DiaryDayController {
         String token = request.getHeader("Authorization");
         if (token == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        Long userId = Long.parseLong(jwtTokenService.extractId(token.substring(7)));
+//        Long userId = Long.parseLong(jwtTokenService.extractId(token.substring(7)));
+        Long userId = Long.valueOf(token);
 
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
         DiaryDayMealFoodDTO diaryDayMealFoodDTOForDay = diaryDayService.getDiaryDayMealFoodDTOForDay(localDate, userId);
@@ -46,7 +47,8 @@ public class DiaryDayController {
         String token = request.getHeader("Authorization");
         if (token == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        Long userId = Long.parseLong(jwtTokenService.extractId(token.substring(7)));
+//        Long userId = Long.parseLong(jwtTokenService.extractId(token.substring(7)));
+        Long userId = Long.valueOf(token);
 
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
         diaryDayService.addFoodToDiary(localDate, mealId, foodQuantityDTO.getFoodId(), foodQuantityDTO.getQuantity(), userId);
