@@ -11,11 +11,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
     private String username;
     private String password;
     private String email;
-    private Double weight;
+    private Double startWeight;
+    private Double currentWeight;
+    private Double goalWeight;
     private Double height;
     private Double calorieGoal;
 
@@ -54,12 +55,28 @@ public class User {
         this.email = email;
     }
 
-    public Double getWeight() {
-        return weight;
+    public Double getStartWeight() {
+        return startWeight;
     }
 
-    public void setWeight(Double weight) {
-        this.weight = weight;
+    public void setStartWeight(Double startWeight) {
+        this.startWeight = startWeight;
+    }
+
+    public Double getCurrentWeight() {
+        return currentWeight;
+    }
+
+    public void setCurrentWeight(Double currentWeight) {
+        this.currentWeight = currentWeight;
+    }
+
+    public Double getGoalWeight() {
+        return goalWeight;
+    }
+
+    public void setGoalWeight(Double goalWeight) {
+        this.goalWeight = goalWeight;
     }
 
     public Double getHeight() {

@@ -4,7 +4,9 @@ public class UserDetailsDTO {
     private Long id;
     private String username;
     private Double calorieGoal;
-    private Double weight;
+    private Double startWeight;
+    private Double goalWeight;
+    private Double currentWeight;
     private Double height;
 
     public Long getId() {
@@ -31,12 +33,12 @@ public class UserDetailsDTO {
         this.calorieGoal = calorieGoal;
     }
 
-    public Double getWeight() {
-        return weight;
+    public Double getStartWeight() {
+        return startWeight;
     }
 
-    public void setWeight(Double weight) {
-        this.weight = weight;
+    public void setStartWeight(Double startWeight) {
+        this.startWeight = startWeight;
     }
 
     public Double getHeight() {
@@ -45,5 +47,21 @@ public class UserDetailsDTO {
 
     public void setHeight(Double height) {
         this.height = height;
+    }
+
+    public Double getGoalWeight() {
+        return goalWeight;
+    }
+
+    public void setGoalWeight(Double goalWeight) {
+        this.goalWeight = goalWeight;
+    }
+
+    public Double getCurrentWeight() {
+        return currentWeight;
+    }
+
+    public void setCurrentWeight(Double currentWeight) {
+        this.currentWeight = currentWeight;
     }
 }

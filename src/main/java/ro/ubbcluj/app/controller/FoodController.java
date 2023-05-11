@@ -51,5 +51,4 @@ public class FoodController {
         List<FoodDetailsDTO> foodDetailsDTOS = foods.stream().map(food -> modelMapper.map(food, FoodDetailsDTO.class)).toList();
         return ResponseEntity.ok(foodDetailsDTOS);
     }
-
 }
