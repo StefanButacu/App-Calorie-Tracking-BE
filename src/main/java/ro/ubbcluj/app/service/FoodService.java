@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ro.ubbcluj.app.domain.CALORIE_VALUE;
 import ro.ubbcluj.app.domain.Food;
+import ro.ubbcluj.app.domain.dto.FoodDetailsDTO;
 import ro.ubbcluj.app.repository.FoodRepository;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class FoodService {
 
     public Long calculateCaloriesForFood(Long foodId, Double quantity) {
         Food food = foodRepository.findById(foodId).orElse(null);
-        if(food == null)
+        if (food == null)
             return 0L;
         return (long) Math.floor(CALORIE_VALUE.PROTEIN.getCalorie() * food.getProtein() * quantity / HUNDRED +
                 CALORIE_VALUE.CARBOHYDRATE.getCalorie() * food.getCarbohydrate() * quantity / HUNDRED +
@@ -37,7 +38,17 @@ public class FoodService {
     public List<Food> getFoodsByName(String foodName) {
         return foodRepository.findAllByName(foodName);
     }
+
     public Page<Food> getFoodsByPage(Pageable pageable) {
         return foodRepository.findAll(pageable);
+    }
+
+    public Food save(FoodDetailsDTO toSaveFood) {
+        Food food = new Food();
+        food.setName(toSaveFood.getName());
+        food.setProtein(toSaveFood.getProtein());
+        food.setCarbohydrate(toSaveFood.getCarbohydrate());
+        food.setLipid(toSaveFood.getLipid());
+        return foodRepository.save(food);
     }
 }

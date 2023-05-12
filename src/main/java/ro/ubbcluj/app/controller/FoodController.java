@@ -1,6 +1,7 @@
 package ro.ubbcluj.app.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import ro.ubbcluj.app.domain.Food;
 import ro.ubbcluj.app.domain.dto.FoodDetailsDTO;
 import ro.ubbcluj.app.service.FoodService;
-import ro.ubbcluj.app.service.JwtTokenService;
 
 import java.util.List;
 
@@ -23,6 +23,7 @@ public class FoodController {
 
     private final FoodService foodService;
     private final ModelMapper modelMapper;
+
     @Autowired
     public FoodController(FoodService foodService, ModelMapper modelMapper) {
         this.foodService = foodService;
@@ -30,7 +31,7 @@ public class FoodController {
     }
 
     @GetMapping("/{food_id}")
-    public ResponseEntity<?> findFoodById(@PathVariable("food_id") Long foodId){
+    public ResponseEntity<?> findFoodById(@PathVariable("food_id") Long foodId) {
         Food food = foodService.findFoodById(foodId);
         if (food == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -50,5 +51,13 @@ public class FoodController {
         List<Food> foods = foodService.getFoodsByName(foodName);
         List<FoodDetailsDTO> foodDetailsDTOS = foods.stream().map(food -> modelMapper.map(food, FoodDetailsDTO.class)).toList();
         return ResponseEntity.ok(foodDetailsDTOS);
+    }
+
+
+    @PostMapping()
+    public ResponseEntity<Food> saveFood(HttpServletRequest request,
+                                        @Valid @RequestBody FoodDetailsDTO toSaveFood) {
+        Food food = foodService.save(toSaveFood);
+        return new ResponseEntity<>(food, HttpStatus.ACCEPTED);
     }
 }

@@ -3,6 +3,7 @@ package ro.ubbcluj.app.domain.dto;
 public class FoodDetailsQuantityDTO {
 
     Long id;
+    String name;
     Double quantity;
     Double proteinPerCent;
     Double carbohydratePerCent;
@@ -11,10 +12,11 @@ public class FoodDetailsQuantityDTO {
     public FoodDetailsQuantityDTO() {
     }
 
-    public FoodDetailsQuantityDTO(Long id, Double quantity, Double protein, Double carbohydratePerCent, Double lipidPerCent) {
+    public FoodDetailsQuantityDTO(Long id, String name, Double quantity, Double proteinPerCent, Double carbohydratePerCent, Double lipidPerCent) {
         this.id = id;
+        this.name = name;
         this.quantity = quantity;
-        this.proteinPerCent = protein;
+        this.proteinPerCent = proteinPerCent;
         this.carbohydratePerCent = carbohydratePerCent;
         this.lipidPerCent = lipidPerCent;
     }
@@ -57,5 +59,13 @@ public class FoodDetailsQuantityDTO {
 
     public void setLipidPerCent(Double lipidPerCent) {
         this.lipidPerCent = lipidPerCent;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

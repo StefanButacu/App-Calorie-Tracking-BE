@@ -86,6 +86,7 @@ public class DiaryDayService {
             return null;
         }
         dto.setId(foodId);
+        dto.setName(food.getName());
         dto.setQuantity(foodMeal.getQuantity());
         dto.setProteinPerCent(food.getProtein());
         dto.setCarbohydratePerCent(food.getCarbohydrate());
