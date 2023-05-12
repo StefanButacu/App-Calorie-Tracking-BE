@@ -1,6 +1,7 @@
 package ro.ubbcluj.app.controller;
 
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,6 +31,8 @@ public class LoginController {
     public ResponseEntity<?> login(@RequestBody AutheticationRequest autheticationRequest){
         User user = userService.login(autheticationRequest.getUsername(), autheticationRequest.getPassword());
 //        String jwtToken = jwtTokenService.generateToken(user);
+        if(user == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         return ResponseEntity.ok(user.getId());
     }
 }
