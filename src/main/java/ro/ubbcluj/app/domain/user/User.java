@@ -29,6 +29,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     private WeightGoal weightGoal;
 
+    private Double proteinGoal;
+
+    private Double carbohydrateGoal;
+
+    private Double lipidGoal;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     List<FoodMeal> foodMeals;
 
@@ -94,5 +100,53 @@ public class User {
 
     public void setCalorieGoal(Double calorieGoal) {
         this.calorieGoal = calorieGoal;
+    }
+
+    public ActivityLevel getActivityLevel() {
+        return activityLevel;
+    }
+
+    public void setActivityLevel(ActivityLevel activityLevel) {
+        this.activityLevel = activityLevel;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public WeightGoal getWeightGoal() {
+        return weightGoal;
+    }
+
+    public void setWeightGoal(WeightGoal weightGoal) {
+        this.weightGoal = weightGoal;
+    }
+
+    public Double getProteinGoal() {
+        return proteinGoal;
+    }
+
+    public void setProteinGoal(Double proteinGoal) {
+        this.proteinGoal = proteinGoal;
+    }
+
+    public Double getCarbohydrateGoal() {
+        return carbohydrateGoal;
+    }
+
+    public void setCarbohydrateGoal(Double carbohydrateGoal) {
+        this.carbohydrateGoal = carbohydrateGoal;
+    }
+
+    public Double getLipidGoal() {
+        return lipidGoal;
+    }
+
+    public void setLipidGoal(Double lipidGoal) {
+        this.lipidGoal = lipidGoal;
     }
 }
