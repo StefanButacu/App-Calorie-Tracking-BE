@@ -1,7 +1,7 @@
 package ro.ubbcluj.app.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ro.ubbcluj.app.domain.User;
+import ro.ubbcluj.app.domain.user.User;
 
 import java.util.Optional;
 

@@ -10,7 +10,7 @@
 //import jakarta.servlet.http.HttpServletResponse;
 //import org.springframework.stereotype.Component;
 //import org.springframework.web.filter.OncePerRequestFilter;
-//import ro.ubbcluj.app.domain.User;
+//import ro.ubbcluj.app.domain.user.User;
 //import ro.ubbcluj.app.repository.UserRepository;
 //import ro.ubbcluj.app.service.JwtTokenService;
 //

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ro.ubbcluj.app.domain.User;
+import ro.ubbcluj.app.domain.user.User;
 import ro.ubbcluj.app.domain.dto.AutheticationRequest;
 import ro.ubbcluj.app.service.JwtTokenService;
 import ro.ubbcluj.app.service.UserService;

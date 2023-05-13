@@ -6,6 +6,7 @@ import ro.ubbcluj.app.domain.dto.DiaryDayMealFoodDTO;
 import ro.ubbcluj.app.domain.dto.FoodDetailsQuantityDTO;
 import ro.ubbcluj.app.domain.dto.FoodWithCalorieDTO;
 import ro.ubbcluj.app.domain.dto.MealFoodDTO;
+import ro.ubbcluj.app.domain.user.User;
 import ro.ubbcluj.app.repository.FoodMealRepository;
 import ro.ubbcluj.app.repository.FoodRepository;
 import ro.ubbcluj.app.repository.MealRepository;
@@ -14,7 +15,6 @@ import ro.ubbcluj.app.repository.UserRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DiaryDayService {

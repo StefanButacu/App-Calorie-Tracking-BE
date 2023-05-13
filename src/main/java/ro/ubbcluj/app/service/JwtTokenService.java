@@ -4,8 +4,7 @@ package ro.ubbcluj.app.service;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import ro.ubbcluj.app.domain.User;
+import ro.ubbcluj.app.domain.user.User;
 
 import java.util.Date;
 import java.util.HashMap;

@@ -1,7 +1,7 @@
 package ro.ubbcluj.app.domain;
 
 import jakarta.persistence.*;
-import org.springframework.context.annotation.Primary;
+import ro.ubbcluj.app.domain.user.User;
 
 @Entity
 @Table(name = "food_meal")

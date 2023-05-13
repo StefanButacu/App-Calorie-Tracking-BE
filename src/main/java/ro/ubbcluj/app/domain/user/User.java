@@ -1,6 +1,7 @@
-package ro.ubbcluj.app.domain;
+package ro.ubbcluj.app.domain.user;
 
 import jakarta.persistence.*;
+import ro.ubbcluj.app.domain.FoodMeal;
 
 import java.util.List;
 
@@ -13,12 +14,20 @@ public class User {
     private Long id;
     private String username;
     private String password;
-    private String email;
     private Double startWeight;
     private Double currentWeight;
     private Double goalWeight;
     private Double height;
     private Double calorieGoal;
+
+    @Enumerated(EnumType.STRING)
+    private ActivityLevel activityLevel;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    @Enumerated(EnumType.STRING)
+    private WeightGoal weightGoal;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     List<FoodMeal> foodMeals;
@@ -45,14 +54,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public Double getStartWeight() {
