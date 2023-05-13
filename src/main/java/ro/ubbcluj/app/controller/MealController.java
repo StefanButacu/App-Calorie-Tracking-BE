@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.ubbcluj.app.domain.Meal;
-import ro.ubbcluj.app.domain.dto.MealDTO;
+import ro.ubbcluj.app.domain.dto.foodDTOS.MealDTO;
 import ro.ubbcluj.app.service.MealService;
 
 @RestController

@@ -6,12 +6,9 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import ro.ubbcluj.app.domain.dto.UserFitnessRequest;
+import ro.ubbcluj.app.domain.dto.userDTOS.UserFitnessRequest;
 import ro.ubbcluj.app.domain.user.User;
 import ro.ubbcluj.app.repository.UserRepository;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class UserService {

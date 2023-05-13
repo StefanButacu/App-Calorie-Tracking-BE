@@ -1,4 +1,4 @@
-package ro.ubbcluj.app.domain.dto;
+package ro.ubbcluj.app.domain.dto.foodDTOS;
 
 public class FoodWithCalorieDTO {
 

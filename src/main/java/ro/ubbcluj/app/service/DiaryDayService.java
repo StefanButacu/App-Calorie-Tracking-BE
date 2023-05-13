@@ -2,10 +2,10 @@ package ro.ubbcluj.app.service;
 
 import org.springframework.stereotype.Service;
 import ro.ubbcluj.app.domain.*;
-import ro.ubbcluj.app.domain.dto.DiaryDayMealFoodDTO;
-import ro.ubbcluj.app.domain.dto.FoodDetailsQuantityDTO;
-import ro.ubbcluj.app.domain.dto.FoodWithCalorieDTO;
-import ro.ubbcluj.app.domain.dto.MealFoodDTO;
+import ro.ubbcluj.app.domain.dto.foodDTOS.DiaryDayMealFoodDTO;
+import ro.ubbcluj.app.domain.dto.foodDTOS.FoodDetailsQuantityDTO;
+import ro.ubbcluj.app.domain.dto.foodDTOS.FoodWithCalorieDTO;
+import ro.ubbcluj.app.domain.dto.foodDTOS.MealFoodDTO;
 import ro.ubbcluj.app.domain.user.User;
 import ro.ubbcluj.app.repository.FoodMealRepository;
 import ro.ubbcluj.app.repository.FoodRepository;

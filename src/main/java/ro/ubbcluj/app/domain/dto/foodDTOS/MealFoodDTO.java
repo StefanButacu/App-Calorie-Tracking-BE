@@ -1,6 +1,4 @@
-package ro.ubbcluj.app.domain.dto;
-
-import ro.ubbcluj.app.domain.Food;
+package ro.ubbcluj.app.domain.dto.foodDTOS;
 
 import java.util.List;
 

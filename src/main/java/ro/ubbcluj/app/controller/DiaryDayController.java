@@ -6,9 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.ubbcluj.app.domain.FoodMeal;
-import ro.ubbcluj.app.domain.dto.DiaryDayMealFoodDTO;
-import ro.ubbcluj.app.domain.dto.FoodDetailsQuantityDTO;
-import ro.ubbcluj.app.domain.dto.FoodQuantityDTO;
+import ro.ubbcluj.app.domain.dto.foodDTOS.DiaryDayMealFoodDTO;
+import ro.ubbcluj.app.domain.dto.foodDTOS.FoodDetailsQuantityDTO;
+import ro.ubbcluj.app.domain.dto.foodDTOS.FoodQuantityDTO;
 import ro.ubbcluj.app.service.DiaryDayService;
 import ro.ubbcluj.app.service.JwtTokenService;
 

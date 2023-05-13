@@ -1,4 +1,4 @@
-package ro.ubbcluj.app.domain.dto;
+package ro.ubbcluj.app.domain.dto.userDTOS;
 
 public class UserFitnessRequest {
     Integer age;

@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ro.ubbcluj.app.domain.CALORIE_VALUE;
 import ro.ubbcluj.app.domain.Food;
-import ro.ubbcluj.app.domain.dto.FoodDetailsDTO;
+import ro.ubbcluj.app.domain.dto.foodDTOS.FoodDetailsDTO;
 import ro.ubbcluj.app.repository.FoodRepository;
 
 import java.util.List;

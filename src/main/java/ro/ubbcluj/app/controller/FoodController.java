@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.ubbcluj.app.domain.Food;
-import ro.ubbcluj.app.domain.dto.FoodDetailsDTO;
+import ro.ubbcluj.app.domain.dto.foodDTOS.FoodDetailsDTO;
 import ro.ubbcluj.app.service.FoodService;
 
 import java.util.List;

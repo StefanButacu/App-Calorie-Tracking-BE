@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.ubbcluj.app.domain.user.User;
-import ro.ubbcluj.app.domain.dto.UserDetailsDTO;
+import ro.ubbcluj.app.domain.dto.userDTOS.UserDetailsDTO;
 import ro.ubbcluj.app.service.UserService;
 
 @RestController
