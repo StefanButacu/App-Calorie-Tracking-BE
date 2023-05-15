@@ -6,7 +6,7 @@ public class UserRegisterRequestDTO {
     String password;
     Double startWeight;
     Double goalWeight;
-    UserFitnessRequestDTO userFitnessRequestDTO;
+    UserFitnessRequestDTO userFitnessRequest;
 
     public String getUsername() {
         return username;
@@ -40,11 +40,11 @@ public class UserRegisterRequestDTO {
         this.goalWeight = goalWeight;
     }
 
-    public UserFitnessRequestDTO getUserFitnessRequestDTO() {
-        return userFitnessRequestDTO;
+    public UserFitnessRequestDTO getUserFitnessRequest() {
+        return userFitnessRequest;
     }
 
-    public void setUserFitnessRequestDTO(UserFitnessRequestDTO userFitnessRequestDTO) {
-        this.userFitnessRequestDTO = userFitnessRequestDTO;
+    public void setUserFitnessRequest(UserFitnessRequestDTO userFitnessRequest) {
+        this.userFitnessRequest = userFitnessRequest;
     }
 }

@@ -61,11 +61,11 @@ public class UserService {
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(FITNESS_API_URL)
                 .queryParam("age", requestDTO.getAge())
-                .queryParam("gender", requestDTO.getGender().getGender())
+                .queryParam("gender", requestDTO.getGender().getApiValue())
                 .queryParam("height", requestDTO.getHeight())
                 .queryParam("weight", requestDTO.getWeight())
-                .queryParam("activitylevel", requestDTO.getActivityLevel().getValue())
-                .queryParam("goal", requestDTO.getWeightGoal().getKey());
+                .queryParam("activitylevel", requestDTO.getActivityLevel().getApiValue())
+                .queryParam("goal", requestDTO.getWeightGoal().getApiValue());
 
         RequestEntity<Void> requestEntity = new RequestEntity<>(headers, HttpMethod.GET, uriBuilder.build().toUri());
         RestTemplate restTemplate = new RestTemplate();
@@ -74,8 +74,8 @@ public class UserService {
         // Process the response
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             JSONObject response = new JSONObject(responseEntity.getBody());
-            JSONObject dietPlan = response.getJSONObject("data").getJSONObject(requestDTO.getDietType().getDietType());
-            Double calorie = response.getJSONObject("data").getDouble("calorie");
+            JSONObject dietPlan = response.getJSONObject("data").getJSONObject(requestDTO.getDietType().getApiValue());
+            Double calorie = Math.floor(response.getJSONObject("data").getDouble("calorie"));
             Double protein = Math.floor(dietPlan.getDouble("protein"));
             Double carbohydrate = Math.floor(dietPlan.getDouble("carbs"));
             Double lipids = Math.floor(dietPlan.getDouble("fat"));
@@ -86,8 +86,8 @@ public class UserService {
     }
 
     public User registerUser(UserRegisterRequestDTO userRegisterRequestDTO) {
-        DietPlanDTO dietPlan = requestUserDietPlan(userRegisterRequestDTO.getUserFitnessRequestDTO());
-        User user = createUser(userRegisterRequestDTO, userRegisterRequestDTO.getUserFitnessRequestDTO(), dietPlan);
+        DietPlanDTO dietPlan = requestUserDietPlan(userRegisterRequestDTO.getUserFitnessRequest());
+        User user = createUser(userRegisterRequestDTO, userRegisterRequestDTO.getUserFitnessRequest(), dietPlan);
         user = userRepository.save(user);
         return user;
     }

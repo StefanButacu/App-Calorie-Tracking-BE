@@ -1,17 +1,23 @@
 package ro.ubbcluj.app.domain.user;
 
 public enum Gender {
-    MALE("male"),
-    FEMALE("female");
+    MALE("male", "Male"),
+    FEMALE("female", "Female");
 
-    private final String gender;
+    private final String apiValue;
+    private final String text;
 
-    Gender(String label) {
-        this.gender = label;
+
+    Gender(String apiValue, String text) {
+        this.apiValue = apiValue;
+        this.text = text;
     }
 
-    public String getGender() {
-        return gender;
+    public String getApiValue() {
+        return apiValue;
+    }
+    public String getText() {
+        return text;
     }
 
 

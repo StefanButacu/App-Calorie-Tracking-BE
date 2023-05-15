@@ -9,19 +9,19 @@ public enum WeightGoal {
     WEIGHT_GAIN("weightgain", "Weight gain"),
     EXTREME_GAIN("extremegain", "Extreme weight gain");
 
-    private final String key;
-    private final String description;
+    private final String apiValue;
+    private final String text;
 
-    WeightGoal(String key, String description) {
-        this.key = key;
-        this.description = description;
+    WeightGoal(String key, String text) {
+        this.apiValue = key;
+        this.text = text;
     }
 
-    public String getKey() {
-        return key;
+    public String getApiValue() {
+        return apiValue;
     }
 
-    public String getDescription() {
-        return description;
+    public String getText() {
+        return text;
     }
 }

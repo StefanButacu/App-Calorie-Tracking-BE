@@ -1,19 +1,24 @@
 package ro.ubbcluj.app.domain.user;
 
 public enum DietType {
-    BALANCED("balanced"),
-    LOW_FAT("lowfat"),
-    LOW_CARBS("lowcarbs"),
-    HIGH_PROTEIN("highprotein");
+    BALANCED("balanced", "Balanced"),
+    LOW_FAT("lowfat", "Low-fat"),
+    LOW_CARBS("lowcarbs", "Low-carbs"),
+    HIGH_PROTEIN("highprotein", "High-protein");
 
+    private final String apiValue;
+    private final String text;
 
-    private final String dietType;
-    DietType(String dietType){
-        this.dietType = dietType;
+    DietType(String apiValue, String text){
+        this.apiValue = apiValue;
+        this.text = text;
     }
 
-    public String getDietType(){
-        return dietType;
+    public String getApiValue(){
+        return apiValue;
+    }
+    public String getText(){
+        return text;
     }
 
 }

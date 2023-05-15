@@ -4,13 +4,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ro.ubbcluj.app.domain.dto.userDTOS.EnumDTO;
 import ro.ubbcluj.app.domain.dto.userDTOS.UserDetailsDTO;
 import ro.ubbcluj.app.domain.dto.userDTOS.UserFitnessRequestDTO;
 import ro.ubbcluj.app.domain.dto.userDTOS.UserRegisterRequestDTO;
-import ro.ubbcluj.app.domain.user.ActivityLevel;
-import ro.ubbcluj.app.domain.user.Gender;
-import ro.ubbcluj.app.domain.user.User;
-import ro.ubbcluj.app.domain.user.WeightGoal;
+import ro.ubbcluj.app.domain.user.*;
 import ro.ubbcluj.app.service.UserService;
 
 import java.util.Arrays;
@@ -57,18 +55,35 @@ public class UserController {
     }
 
     @GetMapping("/activity-levels")
-    public ResponseEntity<List<ActivityLevel>> getAllActivityLevels() {
-        List<ActivityLevel> activityLevels = Arrays.stream(ActivityLevel.values()).toList();
+    public ResponseEntity<List<EnumDTO>> getAllActivityLevels() {
+        List<EnumDTO> activityLevels = Arrays.stream(ActivityLevel.values())
+                .map(activityLevel ->
+                        new EnumDTO(activityLevel.name(), activityLevel.getText()))
+                .toList();
         return ResponseEntity.ok(activityLevels);
     }
+
     @GetMapping("/genders")
-    public ResponseEntity<List<Gender>> getAllGenders() {
-        List<Gender> activityLevels = Arrays.stream(Gender.values()).toList();
-        return ResponseEntity.ok(activityLevels);
+    public ResponseEntity<List<EnumDTO>> getAllGenders() {
+        List<EnumDTO> genders = Arrays.stream(Gender.values())
+                .map(gender -> new EnumDTO(gender.name(), gender.getText()))
+                .toList();
+        return ResponseEntity.ok(genders);
     }
+
     @GetMapping("/weight-goals")
-    public ResponseEntity<List<WeightGoal>> getAllWeightGoals() {
-        List<WeightGoal> activityLevels = Arrays.stream(WeightGoal.values()).toList();
-        return ResponseEntity.ok(activityLevels);
+    public ResponseEntity<List<EnumDTO>> getAllWeightGoals() {
+        List<EnumDTO> weightGoals = Arrays.stream(WeightGoal.values())
+                .map(weightGoal -> new EnumDTO(weightGoal.name(), weightGoal.getText()))
+                .toList();
+        return ResponseEntity.ok(weightGoals);
+    }
+
+    @GetMapping("/diet-types")
+    public ResponseEntity<List<EnumDTO>> getAllDietTypes() {
+        List<EnumDTO> dietTypes = Arrays.stream(DietType.values())
+                .map(dietType -> new EnumDTO(dietType.name(), dietType.getText()))
+                .toList();
+        return ResponseEntity.ok(dietTypes);
     }
 }

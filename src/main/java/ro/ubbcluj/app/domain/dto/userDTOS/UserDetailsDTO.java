@@ -8,6 +8,9 @@ public class UserDetailsDTO {
     private Double goalWeight;
     private Double currentWeight;
     private Double height;
+    private Double proteinGoal;
+    private Double lipidGoal;
+    private Double carbohydrateGoal;
 
     public Long getId() {
         return id;
@@ -63,5 +66,29 @@ public class UserDetailsDTO {
 
     public void setCurrentWeight(Double currentWeight) {
         this.currentWeight = currentWeight;
+    }
+
+    public Double getProteinGoal() {
+        return proteinGoal;
+    }
+
+    public void setProteinGoal(Double proteinGoal) {
+        this.proteinGoal = proteinGoal;
+    }
+
+    public Double getLipidGoal() {
+        return lipidGoal;
+    }
+
+    public void setLipidGoal(Double lipidGoal) {
+        this.lipidGoal = lipidGoal;
+    }
+
+    public Double getCarbohydrateGoal() {
+        return carbohydrateGoal;
+    }
+
+    public void setCarbohydrateGoal(Double carbohydrateGoal) {
+        this.carbohydrateGoal = carbohydrateGoal;
     }
 }

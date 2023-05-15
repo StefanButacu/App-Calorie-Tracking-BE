@@ -9,16 +9,16 @@ public enum ActivityLevel {
     LEVEL_6(6,  "Intense exercise 6-7 times/week"),
     LEVEL_7(7, "Very intense exercise daily, or physical job");
 
-    private final int value;
+    private final int apiValue;
     private final String text;
 
-    ActivityLevel(int value, String text) {
-        this.value = value;
+    ActivityLevel(int apiValue, String text) {
+        this.apiValue = apiValue;
         this.text = text;
     }
 
-    public int getValue() {
-        return value;
+    public int getApiValue() {
+        return apiValue;
     }
     public String getText(){
         return text;
