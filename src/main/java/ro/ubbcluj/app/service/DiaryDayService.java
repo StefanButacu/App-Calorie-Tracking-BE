@@ -1,7 +1,10 @@
 package ro.ubbcluj.app.service;
 
 import org.springframework.stereotype.Service;
-import ro.ubbcluj.app.domain.*;
+import ro.ubbcluj.app.domain.Food;
+import ro.ubbcluj.app.domain.FoodMeal;
+import ro.ubbcluj.app.domain.FoodMealId;
+import ro.ubbcluj.app.domain.Meal;
 import ro.ubbcluj.app.domain.dto.foodDTOS.DiaryDayMealFoodDTO;
 import ro.ubbcluj.app.domain.dto.foodDTOS.FoodDetailsQuantityDTO;
 import ro.ubbcluj.app.domain.dto.foodDTOS.FoodWithCalorieDTO;
@@ -67,11 +70,16 @@ public class DiaryDayService {
         // validate that foodId, mealId, diary day exists
         // update the quantity
         FoodMealId foodMealId = new FoodMealId(foodId, mealId, dayDate, userId);
-        // get the User
-        User user = userRepository.findById(userId).get();
-
-        FoodMeal foodMeal = new FoodMeal(foodMealId, quantity, user);
-        foodMealRepository.save(foodMeal);
+        FoodMeal existingFood = foodMealRepository.findById(foodMealId).orElse(null);
+        if (existingFood != null) {
+            existingFood.setQuantity(existingFood.getQuantity() + quantity);
+            foodMealRepository.save(existingFood);
+        } else {
+            // get the User
+            User user = userRepository.findById(userId).get();
+            FoodMeal foodMeal = new FoodMeal(foodMealId, quantity, user);
+            foodMealRepository.save(foodMeal);
+        }
     }
 
     public void removeFoodFromMeal(LocalDate localDate, Long mealId, Long foodId, Long userId) {
@@ -82,7 +90,7 @@ public class DiaryDayService {
         FoodDetailsQuantityDTO dto = new FoodDetailsQuantityDTO();
         FoodMeal foodMeal = foodMealRepository.findById(new FoodMealId(foodId, mealId, dayDate, userId)).orElse(null);
         Food food = foodRepository.findById(foodId).orElse(null);
-        if(foodMeal == null || food == null) {
+        if (foodMeal == null || food == null) {
             return null;
         }
         dto.setId(foodId);
@@ -98,7 +106,7 @@ public class DiaryDayService {
         FoodMealId foodMealId = new FoodMealId(foodId, mealId, dayDate, userId);
         // get the User
         FoodMeal foodMeal = foodMealRepository.findById(foodMealId).orElse(null);
-        if(foodMeal == null)
+        if (foodMeal == null)
             return null;
         foodMeal.setQuantity(quantity);
         foodMealRepository.save(foodMeal);
