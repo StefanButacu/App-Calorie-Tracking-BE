@@ -30,9 +30,9 @@ public class LoginController {
     @PostMapping()
     public ResponseEntity<?> login(@RequestBody AutheticationRequest autheticationRequest){
         User user = userService.login(autheticationRequest.getUsername(), autheticationRequest.getPassword());
-//        String jwtToken = jwtTokenService.generateToken(user);
+        String jwtToken = jwtTokenService.generateToken(user);
         if(user == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        return ResponseEntity.ok(user.getId());
+        return ResponseEntity.ok(jwtToken);
     }
 }

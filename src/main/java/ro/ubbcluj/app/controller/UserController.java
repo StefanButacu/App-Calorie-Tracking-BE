@@ -1,5 +1,6 @@
 package ro.ubbcluj.app.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import ro.ubbcluj.app.domain.dto.userDTOS.UserDetailsDTO;
 import ro.ubbcluj.app.domain.dto.userDTOS.UserFitnessRequestDTO;
 import ro.ubbcluj.app.domain.dto.userDTOS.UserRegisterRequestDTO;
 import ro.ubbcluj.app.domain.user.*;
+import ro.ubbcluj.app.service.JwtTokenService;
 import ro.ubbcluj.app.service.UserService;
 
 import java.util.Arrays;
@@ -21,22 +23,26 @@ public class UserController {
     private final UserService userService;
 
     private final ModelMapper modelMapper;
+    private final JwtTokenService jwtTokenService;
 
-    public UserController(UserService userService, ModelMapper modelMapper) {
+    public UserController(UserService userService, ModelMapper modelMapper, JwtTokenService jwtTokenService) {
         this.userService = userService;
         this.modelMapper = modelMapper;
+        this.jwtTokenService = jwtTokenService;
     }
 
-
-    @GetMapping("/{id}")
+    @GetMapping("")
     @ResponseBody
-    public ResponseEntity<?> findById(@PathVariable("id") Long userId) {
-        User user = userService.findById(userId);
+    public ResponseEntity<?> findById(HttpServletRequest request) {
+        String token = request.getHeader("Authorization").substring(7);
+        User user = userService.findById(Long.valueOf(jwtTokenService.extractId(token)));
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(modelMapper.map(user, UserDetailsDTO.class), HttpStatus.OK);
     }
+
+
 
     @PostMapping()
     public ResponseEntity<?> registerUser(@RequestBody UserRegisterRequestDTO userRegisterRequestDTO) {
@@ -44,7 +50,8 @@ public class UserController {
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(modelMapper.map(user, UserDetailsDTO.class), HttpStatus.OK);
+//        return new ResponseEntity(modelMapper.map(user, UserDetailsDTO.class), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
 
