@@ -3,6 +3,7 @@ package ro.ubbcluj.app.service;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -17,6 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
     @Value(value = "${fitness.api.key}")
     private String FITNESS_API_KEY;
 
@@ -27,19 +29,18 @@ public class UserService {
     private String FITNESS_API_URL;
 
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User login(String username, String password) {
         User user = loadUserByUsername(username);
         if (user == null) {
-            // throw un-authroized something
             return null;
         }
-        // TODO
-        //  - something with encrypt
-        if (user.getPassword().equals(password)) {
+        boolean isPasswordMatch = passwordEncoder.matches(password, user.getPassword());
+        if (isPasswordMatch) {
             return user;
         }
         return null;
@@ -96,8 +97,7 @@ public class UserService {
         User user = new User();
         // TODO - remove calorieGoal because we have protein, carbo, lipids grams
         user.setUsername(userRegisterRequestDTO.getUsername());
-        // TODO - encrypt password
-        user.setPassword(userRegisterRequestDTO.getPassword());
+        user.setPassword(passwordEncoder.encode(userRegisterRequestDTO.getPassword()));
         user.setStartWeight(userRegisterRequestDTO.getStartWeight());
         user.setCurrentWeight(userFitnessRequestDTO.getWeight());
         user.setGoalWeight(userRegisterRequestDTO.getGoalWeight());
