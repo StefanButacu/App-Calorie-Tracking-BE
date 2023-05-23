@@ -3,6 +3,7 @@ package ro.ubbcluj.app.service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ro.ubbcluj.app.domain.user.User;
 
@@ -12,8 +13,8 @@ import java.util.Map;
 
 @Component
 public class JwtTokenService {
-    private static final String SECRET_KEY = "iojsonwebtokenSignatureAlgorithmassertValidSigningKeytokenSignatureAlgorithmas"; // Change this to a secure secret key
-
+    @Value(value = "${jwt.token.key}")
+    private String SECRET_KEY;
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, user.getId().toString());

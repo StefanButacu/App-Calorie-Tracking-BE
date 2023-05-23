@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ro.ubbcluj.app.domain.user.User;
 import ro.ubbcluj.app.domain.dto.AutheticationRequest;
+import ro.ubbcluj.app.domain.user.User;
 import ro.ubbcluj.app.service.JwtTokenService;
 import ro.ubbcluj.app.service.UserService;
 
@@ -28,9 +28,9 @@ public class LoginController {
 
 
     @PostMapping()
-    public ResponseEntity<?> login(@RequestBody AutheticationRequest autheticationRequest){
+    public ResponseEntity<?> login(@RequestBody AutheticationRequest autheticationRequest) {
         User user = userService.login(autheticationRequest.getUsername(), autheticationRequest.getPassword());
-        if(user == null) {
+        if (user == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         String jwtToken = jwtTokenService.generateToken(user);

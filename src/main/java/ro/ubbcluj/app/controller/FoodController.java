@@ -56,7 +56,7 @@ public class FoodController {
 
     @PostMapping()
     public ResponseEntity<Food> saveFood(HttpServletRequest request,
-                                        @Valid @RequestBody FoodDetailsDTO toSaveFood) {
+                                         @Valid @RequestBody FoodDetailsDTO toSaveFood) {
         Food food = foodService.save(toSaveFood);
         return new ResponseEntity<>(food, HttpStatus.ACCEPTED);
     }

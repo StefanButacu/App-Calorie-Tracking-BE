@@ -43,7 +43,6 @@ public class UserController {
     }
 
 
-
     @PostMapping()
     public ResponseEntity<?> registerUser(@RequestBody UserRegisterRequestDTO userRegisterRequestDTO) {
         User user = userService.registerUser(userRegisterRequestDTO);
