@@ -1,4 +1,4 @@
-package ro.ubbcluj.app.filters;
+package ro.ubbcluj.app.security.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
