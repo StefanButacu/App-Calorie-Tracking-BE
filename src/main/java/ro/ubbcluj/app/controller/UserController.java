@@ -42,6 +42,7 @@ public class UserController {
         UserDetailsDTO userDetailsDTO = modelMapper.map(user, UserDetailsDTO.class);
         userDetailsDTO.setWeightGoal(new EnumDTO(user.getWeightGoal().name(), user.getWeightGoal().getText()));
         userDetailsDTO.setActivityLevel(new EnumDTO(user.getActivityLevel().name(), user.getActivityLevel().getText()));
+        userDetailsDTO.setDietType(new EnumDTO(user.getDietType().name(), user.getDietType().getText()));
         return new ResponseEntity(userDetailsDTO, HttpStatus.OK);
     }
 
@@ -67,11 +68,11 @@ public class UserController {
     }
 
 
-    @PostMapping("/register/goals")
-    public ResponseEntity<?> updateUserGoal(@RequestBody UserFitnessRequestDTO userFitnessRequestDTO) {
-        userService.requestUserDietPlan(userFitnessRequestDTO);
-        return null;
-    }
+//    @PostMapping("/register/goals")
+//    public ResponseEntity<?> updateUserGoal(@RequestBody UserFitnessRequestDTO userFitnessRequestDTO) {
+//        userService.requestUserDietPlan(userFitnessRequestDTO);
+//        return null;
+//    }
 
     @GetMapping("/register/activity-levels")
     public ResponseEntity<List<EnumDTO>> getAllActivityLevels() {

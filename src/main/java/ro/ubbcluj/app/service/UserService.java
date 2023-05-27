@@ -102,6 +102,7 @@ public class UserService {
         user.setCurrentWeight(userFitnessRequestDTO.getWeight());
         user.setGoalWeight(userRegisterRequestDTO.getGoalWeight());
         user.setHeight(userFitnessRequestDTO.getHeight());
+        user.setDietType(userFitnessRequestDTO.getDietType());
         ///
         user.setProteinGoal(dietPlan.getProtein());
         user.setCarbohydrateGoal(dietPlan.getCarbs());

@@ -27,11 +27,15 @@ public class User {
     @Enumerated(EnumType.STRING)
     private WeightGoal weightGoal;
 
+    @Enumerated(EnumType.STRING)
+    private DietType dietType;
+
     private Double proteinGoal;
 
     private Double carbohydrateGoal;
 
     private Double lipidGoal;
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     List<FoodMeal> foodMeals;
@@ -137,5 +141,13 @@ public class User {
 
     public void setLipidGoal(Double lipidGoal) {
         this.lipidGoal = lipidGoal;
+    }
+
+    public DietType getDietType() {
+        return dietType;
+    }
+
+    public void setDietType(DietType dietType) {
+        this.dietType = dietType;
     }
 }

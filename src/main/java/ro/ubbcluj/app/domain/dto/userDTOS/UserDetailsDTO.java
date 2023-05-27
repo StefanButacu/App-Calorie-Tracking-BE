@@ -3,7 +3,6 @@ package ro.ubbcluj.app.domain.dto.userDTOS;
 public class UserDetailsDTO {
     private Long id;
     private String username;
-    private Double calorieGoal;
     private Double startWeight;
     private Double goalWeight;
     private Double currentWeight;
@@ -34,10 +33,6 @@ public class UserDetailsDTO {
 
     public Double getCalorieGoal() {
         return 4 * proteinGoal + 4 * carbohydrateGoal + 9 * lipidGoal;
-    }
-
-    public void setCalorieGoal(Double calorieGoal) {
-        this.calorieGoal = calorieGoal;
     }
 
     public Double getStartWeight() {
@@ -119,4 +114,5 @@ public class UserDetailsDTO {
     public void setDietType(EnumDTO dietType) {
         this.dietType = dietType;
     }
+
 }
