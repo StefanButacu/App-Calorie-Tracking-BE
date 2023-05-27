@@ -18,8 +18,6 @@ public class User {
     private Double currentWeight;
     private Double goalWeight;
     private Double height;
-    private Double calorieGoal;
-
     @Enumerated(EnumType.STRING)
     private ActivityLevel activityLevel;
 
@@ -93,15 +91,6 @@ public class User {
     public void setHeight(Double height) {
         this.height = height;
     }
-
-    public Double getCalorieGoal() {
-        return calorieGoal;
-    }
-
-    public void setCalorieGoal(Double calorieGoal) {
-        this.calorieGoal = calorieGoal;
-    }
-
     public ActivityLevel getActivityLevel() {
         return activityLevel;
     }

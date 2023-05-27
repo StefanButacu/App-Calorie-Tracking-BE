@@ -27,6 +27,7 @@ public class UserService {
 
     @Value(value = "${fitness.api.url}")
     private String FITNESS_API_URL;
+    private final DietPlanDTO DEFAULT_DIET_PLAN = new DietPlanDTO(2000.0, 137.0, 137.0, 100.0);
 
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -82,7 +83,7 @@ public class UserService {
             Double lipids = Math.floor(dietPlan.getDouble("fat"));
             return new DietPlanDTO(calorie, protein, carbohydrate, lipids);
         } else {
-            return new DietPlanDTO(2000.0, 137.0, 137.0, 100.0);
+            return DEFAULT_DIET_PLAN;
         }
     }
 
@@ -95,7 +96,6 @@ public class UserService {
 
     private User createUser(UserRegisterRequestDTO userRegisterRequestDTO, UserFitnessRequestDTO userFitnessRequestDTO, DietPlanDTO dietPlan) {
         User user = new User();
-        // TODO - remove calorieGoal because we have protein, carbo, lipids grams
         user.setUsername(userRegisterRequestDTO.getUsername());
         user.setPassword(passwordEncoder.encode(userRegisterRequestDTO.getPassword()));
         user.setStartWeight(userRegisterRequestDTO.getStartWeight());
@@ -103,7 +103,6 @@ public class UserService {
         user.setGoalWeight(userRegisterRequestDTO.getGoalWeight());
         user.setHeight(userFitnessRequestDTO.getHeight());
         ///
-        user.setCalorieGoal(dietPlan.getCalorie());
         user.setProteinGoal(dietPlan.getProtein());
         user.setCarbohydrateGoal(dietPlan.getCarbs());
         user.setLipidGoal(dietPlan.getLipid());
@@ -115,5 +114,12 @@ public class UserService {
         return user;
     }
 
-
+    public void updateCurrentWeight(Long userId, Double currentWeight) {
+        User user = findById(userId);
+        if (user == null) {
+            throw new RuntimeException("Invalid user");
+        }
+        user.setCurrentWeight(currentWeight);
+        userRepository.save(user);
+    }
 }

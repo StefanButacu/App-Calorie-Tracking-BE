@@ -4,6 +4,9 @@ public class EnumDTO {
     String key;
     String text;
 
+    public EnumDTO() {
+    }
+
     public EnumDTO(String key, String text) {
         this.key = key;
         this.text = text;

@@ -31,7 +31,7 @@ public class UserController {
         this.jwtTokenService = jwtTokenService;
     }
 
-    @GetMapping("")
+    @GetMapping()
     @ResponseBody
     public ResponseEntity<?> findById(HttpServletRequest request) {
         String token = request.getHeader("Authorization").substring(7);
@@ -39,9 +39,23 @@ public class UserController {
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(modelMapper.map(user, UserDetailsDTO.class), HttpStatus.OK);
+        UserDetailsDTO userDetailsDTO = modelMapper.map(user, UserDetailsDTO.class);
+        userDetailsDTO.setWeightGoal(new EnumDTO(user.getWeightGoal().name(), user.getWeightGoal().getText()));
+        userDetailsDTO.setActivityLevel(new EnumDTO(user.getActivityLevel().name(), user.getActivityLevel().getText()));
+        return new ResponseEntity(userDetailsDTO, HttpStatus.OK);
     }
 
+
+    @PatchMapping("/weight")
+    @ResponseBody
+    public ResponseEntity<?> updateWeight(HttpServletRequest request,@RequestBody Double currentWeight) {
+        String token = request.getHeader("Authorization");
+        if (token == null)
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        Long userId = Long.parseLong(jwtTokenService.extractId(token.substring(7)));
+        userService.updateCurrentWeight(userId, currentWeight);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
     @PostMapping()
     public ResponseEntity<?> registerUser(@RequestBody UserRegisterRequestDTO userRegisterRequestDTO) {
@@ -49,18 +63,17 @@ public class UserController {
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-//        return new ResponseEntity(modelMapper.map(user, UserDetailsDTO.class), HttpStatus.OK);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
 
-    @PostMapping("/goals")
+    @PostMapping("/register/goals")
     public ResponseEntity<?> updateUserGoal(@RequestBody UserFitnessRequestDTO userFitnessRequestDTO) {
         userService.requestUserDietPlan(userFitnessRequestDTO);
         return null;
     }
 
-    @GetMapping("/activity-levels")
+    @GetMapping("/register/activity-levels")
     public ResponseEntity<List<EnumDTO>> getAllActivityLevels() {
         List<EnumDTO> activityLevels = Arrays.stream(ActivityLevel.values())
                 .map(activityLevel ->
@@ -69,7 +82,7 @@ public class UserController {
         return ResponseEntity.ok(activityLevels);
     }
 
-    @GetMapping("/genders")
+    @GetMapping("/register/genders")
     public ResponseEntity<List<EnumDTO>> getAllGenders() {
         List<EnumDTO> genders = Arrays.stream(Gender.values())
                 .map(gender -> new EnumDTO(gender.name(), gender.getText()))
@@ -77,7 +90,7 @@ public class UserController {
         return ResponseEntity.ok(genders);
     }
 
-    @GetMapping("/weight-goals")
+    @GetMapping("/register/weight-goals")
     public ResponseEntity<List<EnumDTO>> getAllWeightGoals() {
         List<EnumDTO> weightGoals = Arrays.stream(WeightGoal.values())
                 .map(weightGoal -> new EnumDTO(weightGoal.name(), weightGoal.getText()))
@@ -85,7 +98,7 @@ public class UserController {
         return ResponseEntity.ok(weightGoals);
     }
 
-    @GetMapping("/diet-types")
+    @GetMapping("/register/diet-types")
     public ResponseEntity<List<EnumDTO>> getAllDietTypes() {
         List<EnumDTO> dietTypes = Arrays.stream(DietType.values())
                 .map(dietType -> new EnumDTO(dietType.name(), dietType.getText()))

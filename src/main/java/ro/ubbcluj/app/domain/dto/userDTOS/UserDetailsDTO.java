@@ -12,6 +12,10 @@ public class UserDetailsDTO {
     private Double lipidGoal;
     private Double carbohydrateGoal;
 
+    private EnumDTO activityLevel;
+    private EnumDTO weightGoal;
+    private EnumDTO dietType;
+
     public Long getId() {
         return id;
     }
@@ -29,7 +33,7 @@ public class UserDetailsDTO {
     }
 
     public Double getCalorieGoal() {
-        return calorieGoal;
+        return 4 * proteinGoal + 4 * carbohydrateGoal + 9 * lipidGoal;
     }
 
     public void setCalorieGoal(Double calorieGoal) {
@@ -90,5 +94,29 @@ public class UserDetailsDTO {
 
     public void setCarbohydrateGoal(Double carbohydrateGoal) {
         this.carbohydrateGoal = carbohydrateGoal;
+    }
+
+    public EnumDTO getActivityLevel() {
+        return activityLevel;
+    }
+
+    public void setActivityLevel(EnumDTO activityLevel) {
+        this.activityLevel = activityLevel;
+    }
+
+    public EnumDTO getWeightGoal() {
+        return weightGoal;
+    }
+
+    public void setWeightGoal(EnumDTO weightGoal) {
+        this.weightGoal = weightGoal;
+    }
+
+    public EnumDTO getDietType() {
+        return dietType;
+    }
+
+    public void setDietType(EnumDTO dietType) {
+        this.dietType = dietType;
     }
 }
