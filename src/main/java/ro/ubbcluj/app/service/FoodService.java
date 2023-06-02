@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ro.ubbcluj.app.domain.CALORIE_VALUE;
+import ro.ubbcluj.app.domain.CalorieValue;
 import ro.ubbcluj.app.domain.Food;
 import ro.ubbcluj.app.domain.dto.foodDTOS.FoodDetailsDTO;
 import ro.ubbcluj.app.repository.FoodRepository;
@@ -30,9 +30,9 @@ public class FoodService {
         Food food = foodRepository.findById(foodId).orElse(null);
         if (food == null)
             return 0L;
-        return (long) Math.floor(CALORIE_VALUE.PROTEIN.getCalorie() * food.getProtein() * quantity / HUNDRED +
-                CALORIE_VALUE.CARBOHYDRATE.getCalorie() * food.getCarbohydrate() * quantity / HUNDRED +
-                CALORIE_VALUE.LIPID.getCalorie() * food.getLipid() * quantity / HUNDRED);
+        return (long) Math.floor(CalorieValue.PROTEIN.getCalorie() * food.getProtein() * quantity / HUNDRED +
+                CalorieValue.CARBOHYDRATE.getCalorie() * food.getCarbohydrate() * quantity / HUNDRED +
+                CalorieValue.LIPID.getCalorie() * food.getLipid() * quantity / HUNDRED);
     }
 
     public List<Food> getFoodsByName(String foodName) {

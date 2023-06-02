@@ -1,4 +1,4 @@
-package ro.ubbcluj.app.domain.user;
+package ro.ubbcluj.app.domain.dto;
 
 public class DietPlanDTO {
 

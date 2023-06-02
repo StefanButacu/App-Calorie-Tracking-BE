@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import ro.ubbcluj.app.domain.dto.userDTOS.UserFitnessRequestDTO;
 import ro.ubbcluj.app.domain.dto.userDTOS.UserRegisterRequestDTO;
-import ro.ubbcluj.app.domain.user.DietPlanDTO;
+import ro.ubbcluj.app.domain.dto.DietPlanDTO;
 import ro.ubbcluj.app.domain.user.User;
 import ro.ubbcluj.app.repository.UserRepository;
 
