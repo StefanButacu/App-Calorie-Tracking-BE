@@ -1,25 +1,25 @@
 package ro.ubbcluj.app.domain.user;
 
 public enum ActivityLevel {
-    LEVEL_1(1, "Basic Metabolic Rate"),
-    LEVEL_2(2, "Sedentary"),
-    LEVEL_3(3, "1-3 times/week"),
-    LEVEL_4(4,  "4-5 times/week"),
-    LEVEL_5(5,  "3-4 times/week"),
-    LEVEL_6(6,  "6-7 times/week"),
-    LEVEL_7(7, "Very intense exercise daily");
+    LEVEL_0(1.0, "Basic Metabolic Rate"),
+    LEVEL_1(1.2, "Sedentary"),
+    LEVEL_2(1.55, "Exercise 1-3 times/week"),
+    LEVEL_3(1.55,  "Exercise 5-6 times/week"),
+    LEVEL_4(1.725, "Very intense exercise daily"),
+    LEVEL_5(1.725, "Very exhausting exercise for a long period");
 
-    private final int apiValue;
+    private final double activityFactor;
     private final String text;
 
-    ActivityLevel(int apiValue, String text) {
-        this.apiValue = apiValue;
+    ActivityLevel(double activityFactor, String text) {
+        this.activityFactor = activityFactor;
         this.text = text;
     }
 
-    public int getApiValue() {
-        return apiValue;
+    public double getActivityFactor() {
+        return activityFactor;
     }
+
     public String getText(){
         return text;
     }

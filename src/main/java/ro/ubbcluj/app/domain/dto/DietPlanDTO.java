@@ -8,10 +8,10 @@ public class DietPlanDTO {
     Double lipid;
 
     public DietPlanDTO(Double calorie, Double protein, Double carbs, Double lipid) {
-        this.calorie = calorie;
-        this.protein = protein;
-        this.carbs = carbs;
-        this.lipid = lipid;
+        this.calorie = Math.floor(calorie);
+        this.protein = Math.floor(protein);
+        this.carbs = Math.floor(carbs);
+        this.lipid = Math.floor(lipid);
     }
 
     public Double getCalorie() {

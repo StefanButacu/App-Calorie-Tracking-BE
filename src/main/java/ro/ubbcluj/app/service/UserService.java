@@ -1,15 +1,14 @@
 package ro.ubbcluj.app.service;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
+import ro.ubbcluj.app.domain.CalorieValue;
+import ro.ubbcluj.app.domain.dto.DietPlanDTO;
 import ro.ubbcluj.app.domain.dto.userDTOS.UserFitnessRequestDTO;
 import ro.ubbcluj.app.domain.dto.userDTOS.UserRegisterRequestDTO;
-import ro.ubbcluj.app.domain.dto.DietPlanDTO;
+import ro.ubbcluj.app.domain.user.ActivityLevel;
+import ro.ubbcluj.app.domain.user.Gender;
 import ro.ubbcluj.app.domain.user.User;
 import ro.ubbcluj.app.repository.UserRepository;
 
@@ -29,6 +28,7 @@ public class UserService {
     private String FITNESS_API_URL;
     private final DietPlanDTO DEFAULT_DIET_PLAN = new DietPlanDTO(2000.0, 137.0, 137.0, 100.0);
 
+    private final Double ONE_THOUSAND = 1000.0;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -56,38 +56,29 @@ public class UserService {
     }
 
     public DietPlanDTO requestUserDietPlan(UserFitnessRequestDTO requestDTO) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("X-RapidAPI-Key", FITNESS_API_KEY);
-        headers.set("X-RapidAPI-Host", FITNESS_API_HOST);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(FITNESS_API_URL)
-                .queryParam("age", requestDTO.getAge())
-                .queryParam("gender", requestDTO.getGender().getApiValue())
-                .queryParam("height", requestDTO.getHeight())
-                .queryParam("weight", requestDTO.getWeight())
-                .queryParam("activitylevel", requestDTO.getActivityLevel().getApiValue())
-                .queryParam("goal", requestDTO.getWeightGoal().getApiValue());
-
-        RequestEntity<Void> requestEntity = new RequestEntity<>(headers, HttpMethod.GET, uriBuilder.build().toUri());
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> responseEntity = restTemplate.exchange(requestEntity, String.class);
-
-        // Process the response
-        if (responseEntity.getStatusCode().is2xxSuccessful()) {
-            JSONObject response = new JSONObject(responseEntity.getBody());
-            JSONObject dietPlan = response.getJSONObject("data").getJSONObject(requestDTO.getDietType().getApiValue());
-            Double calorie = Math.floor(response.getJSONObject("data").getDouble("calorie"));
-            Double protein = Math.floor(dietPlan.getDouble("protein"));
-            Double carbohydrate = Math.floor(dietPlan.getDouble("carbs"));
-            Double lipids = Math.floor(dietPlan.getDouble("fat"));
-            return new DietPlanDTO(calorie, protein, carbohydrate, lipids);
-        } else {
-            return DEFAULT_DIET_PLAN;
+        double calorieGoal = Math.floor(calculateCalorieGoal(requestDTO));
+        switch (requestDTO.getDietType()) {
+            case BALANCED -> {
+                return new DietPlanDTO(calorieGoal, calorieGoal * 0.3 / CalorieValue.PROTEIN.getCalorie(), calorieGoal * 0.4 / CalorieValue.CARBOHYDRATE.getCalorie(), calorieGoal * 0.3 / CalorieValue.LIPID.getCalorie());
+            }
+            case LOW_FAT -> {
+                return new DietPlanDTO(calorieGoal, calorieGoal * 0.3 / CalorieValue.PROTEIN.getCalorie(), calorieGoal * 0.5 / CalorieValue.CARBOHYDRATE.getCalorie(), calorieGoal * 0.2 / CalorieValue.LIPID.getCalorie());
+            }
+            case LOW_CARBS -> {
+                return new DietPlanDTO(calorieGoal, calorieGoal * 0.35 / CalorieValue.PROTEIN.getCalorie(), calorieGoal * 0.3 / CalorieValue.CARBOHYDRATE.getCalorie(), calorieGoal * 0.35 / CalorieValue.LIPID.getCalorie());
+            }
+            case HIGH_PROTEIN -> {
+                return new DietPlanDTO(calorieGoal, calorieGoal * 0.4 / CalorieValue.PROTEIN.getCalorie(), calorieGoal * 0.3 / CalorieValue.CARBOHYDRATE.getCalorie(), calorieGoal * 0.3 / CalorieValue.LIPID.getCalorie());
+            }
+            default -> {
+                return DEFAULT_DIET_PLAN;
+            }
         }
     }
 
     public User registerUser(UserRegisterRequestDTO userRegisterRequestDTO) {
+        if (loadUserByUsername(userRegisterRequestDTO.getUsername()) != null)
+            throw new RuntimeException("Invalid username");
         DietPlanDTO dietPlan = requestUserDietPlan(userRegisterRequestDTO.getUserFitnessRequest());
         User user = createUser(userRegisterRequestDTO, userRegisterRequestDTO.getUserFitnessRequest(), dietPlan);
         user = userRepository.save(user);
@@ -122,5 +113,31 @@ public class UserService {
         }
         user.setCurrentWeight(currentWeight);
         userRepository.save(user);
+    }
+
+    private double calculateBMR(double weight, double height, int age, Gender gender, ActivityLevel activityLevel) {
+        if (gender == Gender.MALE) {
+            return (10 * weight + 6.25 * height - 5 * age + 5) * activityLevel.getActivityFactor();
+        } else {
+            return (10 * weight + 6.25 * height - 5 * age - 161) * activityLevel.getActivityFactor();
+        }
+    }
+
+    private double calculateCalorieGoal(UserFitnessRequestDTO requestDTO) {
+        double bmr = calculateBMR(requestDTO.getWeight(), requestDTO.getHeight(), requestDTO.getAge(), requestDTO.getGender(), requestDTO.getActivityLevel());
+        switch (requestDTO.getWeightGoal()) {
+            case MAINTAIN -> {
+                return bmr;
+            }
+            case WEIGHT_GAIN -> {
+                return 1.15 * bmr;
+            }
+            case WEIGHT_LOSE -> {
+                return 0.85 * bmr;
+            }
+            default -> {
+                return bmr;
+            }
+        }
     }
 }
