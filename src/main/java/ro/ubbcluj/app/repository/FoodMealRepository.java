@@ -17,6 +17,6 @@ public interface FoodMealRepository extends JpaRepository<FoodMeal, FoodMealId> 
             "left join Food f on fm.foodMealId.foodId = f.id " +
             "left join Meal m on fm.foodMealId.mealId = m.id " +
             "where fm.user.id = :userId and fm.foodMealId.diaryDay = :diaryDay ")
-        List<FoodMeal> getFoodMealsByDayAndUser(@Param("diaryDay") LocalDate diaryDay, @Param("userId") Long userId);
+    List<FoodMeal> getFoodMealsByDayAndUser(@Param("diaryDay") LocalDate diaryDay, @Param("userId") Long userId);
 
 }

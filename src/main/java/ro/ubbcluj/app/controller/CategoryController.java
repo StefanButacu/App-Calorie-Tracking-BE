@@ -1,8 +1,7 @@
 package ro.ubbcluj.app.controller;
 
-import org.springframework.web.bind.annotation.*;
-
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URI;

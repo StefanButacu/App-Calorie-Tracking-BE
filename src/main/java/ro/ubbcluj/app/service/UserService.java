@@ -27,9 +27,7 @@ public class UserService {
     @Value(value = "${fitness.api.url}")
     private String FITNESS_API_URL;
     private final DietPlanDTO DEFAULT_DIET_PLAN = new DietPlanDTO(2000.0, 137.0, 137.0, 100.0);
-
-    private final Double ONE_THOUSAND = 1000.0;
-
+    
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;

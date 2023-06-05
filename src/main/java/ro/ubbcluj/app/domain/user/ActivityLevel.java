@@ -4,7 +4,7 @@ public enum ActivityLevel {
     LEVEL_0(1.0, "Basic Metabolic Rate"),
     LEVEL_1(1.2, "Sedentary"),
     LEVEL_2(1.55, "Exercise 1-3 times/week"),
-    LEVEL_3(1.55,  "Exercise 5-6 times/week"),
+    LEVEL_3(1.55, "Exercise 5-6 times/week"),
     LEVEL_4(1.725, "Very intense exercise daily"),
     LEVEL_5(1.725, "Very exhausting exercise for a long period");
 
@@ -20,7 +20,7 @@ public enum ActivityLevel {
         return activityFactor;
     }
 
-    public String getText(){
+    public String getText() {
         return text;
     }
 

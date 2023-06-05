@@ -14,6 +14,7 @@ public class Food {
     private Double protein;
     private Double carbohydrate;
     private Double lipid;
+
     public Long getId() {
         return id;
     }

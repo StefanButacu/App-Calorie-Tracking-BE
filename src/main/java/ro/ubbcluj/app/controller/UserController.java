@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.ubbcluj.app.domain.dto.userDTOS.EnumDTO;
 import ro.ubbcluj.app.domain.dto.userDTOS.UserDetailsDTO;
-import ro.ubbcluj.app.domain.dto.userDTOS.UserFitnessRequestDTO;
 import ro.ubbcluj.app.domain.dto.userDTOS.UserRegisterRequestDTO;
 import ro.ubbcluj.app.domain.user.*;
 import ro.ubbcluj.app.service.JwtTokenService;
@@ -49,7 +48,7 @@ public class UserController {
 
     @PatchMapping("/weight")
     @ResponseBody
-    public ResponseEntity<?> updateWeight(HttpServletRequest request,@RequestBody Double currentWeight) {
+    public ResponseEntity<?> updateWeight(HttpServletRequest request, @RequestBody Double currentWeight) {
         String token = request.getHeader("Authorization");
         if (token == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

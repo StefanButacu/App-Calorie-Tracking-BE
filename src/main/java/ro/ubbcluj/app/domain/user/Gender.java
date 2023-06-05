@@ -16,6 +16,7 @@ public enum Gender {
     public String getApiValue() {
         return apiValue;
     }
+
     public String getText() {
         return text;
     }

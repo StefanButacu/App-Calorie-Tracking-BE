@@ -17,7 +17,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public FilterRegistrationBean<AuthorizationFilter> authorizationFilter(){
+    public FilterRegistrationBean<AuthorizationFilter> authorizationFilter() {
         FilterRegistrationBean<AuthorizationFilter> registrationBean = new FilterRegistrationBean<>();
 
         registrationBean.setFilter(new AuthorizationFilter(jwtTokenService));
@@ -27,7 +27,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder(){
+    PasswordEncoder passwordEncoder() {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder;
     }

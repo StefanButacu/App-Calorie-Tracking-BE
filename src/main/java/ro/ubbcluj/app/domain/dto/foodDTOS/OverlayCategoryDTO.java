@@ -8,7 +8,8 @@ public class OverlayCategoryDTO {
     private Map<Integer, List<Integer>> categoryColors;
     private int[][][] overlayMap;
 
-    public OverlayCategoryDTO() {}
+    public OverlayCategoryDTO() {
+    }
 
     public Map<Integer, List<Integer>> getCategoryColors() {
         return categoryColors;

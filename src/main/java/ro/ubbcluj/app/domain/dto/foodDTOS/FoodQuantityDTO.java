@@ -5,6 +5,7 @@ public class FoodQuantityDTO {
     private Long foodId;
 
     private Double quantity;
+
     public Long getFoodId() {
         return foodId;
     }

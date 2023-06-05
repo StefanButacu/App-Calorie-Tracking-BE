@@ -9,15 +9,16 @@ public enum DietType {
     private final String apiValue;
     private final String text;
 
-    DietType(String apiValue, String text){
+    DietType(String apiValue, String text) {
         this.apiValue = apiValue;
         this.text = text;
     }
 
-    public String getApiValue(){
+    public String getApiValue() {
         return apiValue;
     }
-    public String getText(){
+
+    public String getText() {
         return text;
     }
 
