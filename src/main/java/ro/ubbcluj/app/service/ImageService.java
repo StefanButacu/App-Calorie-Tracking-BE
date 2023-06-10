@@ -1,5 +1,7 @@
 package ro.ubbcluj.app.service;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -12,14 +14,12 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ImageService {
@@ -73,15 +73,16 @@ public class ImageService {
 
     private static OverlayCategoryDTO parseImageResponseToOverlay(String jsonToParse) {
         OverlayCategoryDTO dto = new OverlayCategoryDTO();
-
         JSONObject json = new JSONObject(jsonToParse);
-        JSONObject colorMap = new JSONObject(json.getString("color_map"));
+        Gson gson = new Gson();
+        Type type = new TypeToken<LinkedHashMap<String, ArrayList<Integer>>>(){}.getType();
+        String innerJsonString = json.getString("color_map");
+        Map<String, ArrayList<Integer>> colorJsonMap = gson.fromJson(innerJsonString, type);
 
-        Map<Integer, List<Integer>> colorLabels = new HashMap<>();
-        for (String key : colorMap.keySet()) {
-            JSONArray jsonArray = colorMap.getJSONArray(key);
-            List<Integer> rgbPixel = jsonArray.toList().stream().map(Integer.class::cast).toList();
-            colorLabels.put(Integer.parseInt(key), rgbPixel);
+        Map<Integer, List<Integer>> colorLabels = new LinkedHashMap<>();
+        for(Map.Entry<String, ArrayList<Integer>> entry: colorJsonMap.entrySet()){
+            List<Integer> rgbPixel = entry.getValue();
+            colorLabels.put(Integer.parseInt(entry.getKey()), rgbPixel);
         }
         dto.setCategoryColors(colorLabels);
 

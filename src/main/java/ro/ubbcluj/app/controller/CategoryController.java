@@ -16,11 +16,12 @@ public class CategoryController {
 
     @Value(value = "${image.api.key}")
     private String IMAGE_API_KEY;
-
+    @Value(value = "${python.server.api}")
+    private String PYTHON_API;
     @GetMapping()
     public String getCategories() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:5000/category"))
+                .uri(URI.create(PYTHON_API + "/category"))
                 .header("x-api-key", IMAGE_API_KEY)
                 .GET()
                 .build();
@@ -35,7 +36,7 @@ public class CategoryController {
     @GetMapping("/{id}")
     public String getCategory(@PathVariable("id") String id) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:5000/category/" + id))
+                .uri(URI.create(PYTHON_API + "/category/" + id))
                 .header("x-api-key", IMAGE_API_KEY)
                 .GET()
                 .build();

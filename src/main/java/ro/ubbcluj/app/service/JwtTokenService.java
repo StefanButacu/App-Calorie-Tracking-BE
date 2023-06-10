@@ -23,7 +23,7 @@ public class JwtTokenService {
 
     private String createToken(Map<String, Object> claims, String subject) {
         long now = System.currentTimeMillis();
-        long validity = 3600 * 1000; // Token is valid for 1 hour
+        long validity = 3600 * 5000L; // Token is valid for 5 hours
         Date issuedAt = new Date(now);
         Date expiresAt = new Date(now + validity);
 
