@@ -18,6 +18,7 @@ import ro.ubbcluj.app.repository.UserRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DiaryDayService {
@@ -41,11 +42,6 @@ public class DiaryDayService {
         DiaryDayMealFoodDTO dto = new DiaryDayMealFoodDTO();
         dto.setDiaryDay(dayDate.toString());
         List<MealFoodDTO> mealFoodDTOS = new ArrayList<>();
-
-        // can get all meals for this user
-        // TODO - create a relation between user and meals
-        // u1 - 0, 1, 2
-        // u2 - 3, 4 , 5 ,6 7 - this one has 5 meals/day
         List<Meal> allMeals = mealRepository.findAll();
         for (Meal dbMeal : allMeals) {
             MealFoodDTO mealFoodDTO = new MealFoodDTO();
@@ -54,8 +50,11 @@ public class DiaryDayService {
             List<FoodWithCalorieDTO> foodWithCalorieDTOS = new ArrayList<>();
             for (FoodMeal foodMeal : foodMeals) {
                 if (dbMeal.getId().equals(foodMeal.getFoodMealId().getMealId())) {
-                    Food food = foodRepository.findById(foodMeal.getFoodMealId().getFoodId()).get();
-                    foodWithCalorieDTOS.add(new FoodWithCalorieDTO(food.getId(), food.getName(), foodMeal.getQuantity(), foodService.calculateCaloriesForFood(food.getId(), foodMeal.getQuantity())));
+                    Optional<Food> foodById = foodRepository.findById(foodMeal.getFoodMealId().getFoodId());
+                    if (foodById.isPresent()) {
+                        Food food = foodById.get();
+                        foodWithCalorieDTOS.add(new FoodWithCalorieDTO(food.getId(), food.getName(), foodMeal.getQuantity(), foodService.calculateCaloriesForFood(food.getId(), foodMeal.getQuantity())));
+                    }
                 }
             }
             mealFoodDTO.setFoodList(foodWithCalorieDTOS);
@@ -67,7 +66,6 @@ public class DiaryDayService {
     }
 
     public void addFoodToDiary(LocalDate dayDate, Long mealId, Long foodId, Double quantity, Long userId) {
-        // validate that foodId, mealId, diary day exists
         // update the quantity
         FoodMealId foodMealId = new FoodMealId(foodId, mealId, dayDate, userId);
         FoodMeal existingFood = foodMealRepository.findById(foodMealId).orElse(null);
@@ -75,10 +73,12 @@ public class DiaryDayService {
             existingFood.setQuantity(existingFood.getQuantity() + quantity);
             foodMealRepository.save(existingFood);
         } else {
-            // get the User
-            User user = userRepository.findById(userId).get();
-            FoodMeal foodMeal = new FoodMeal(foodMealId, quantity, user);
-            foodMealRepository.save(foodMeal);
+            Optional<User> userById = userRepository.findById(userId);
+            if (userById.isPresent()) {
+                User user = userById.get();
+                FoodMeal foodMeal = new FoodMeal(foodMealId, quantity, user);
+                foodMealRepository.save(foodMeal);
+            }
         }
     }
 
@@ -104,10 +104,8 @@ public class DiaryDayService {
 
     public FoodMeal updateFoodToDiary(LocalDate dayDate, Long mealId, Long foodId, Double quantity, Long userId) {
         FoodMealId foodMealId = new FoodMealId(foodId, mealId, dayDate, userId);
-        // get the User
         FoodMeal foodMeal = foodMealRepository.findById(foodMealId).orElse(null);
-        if (foodMeal == null)
-            return null;
+        if (foodMeal == null) return null;
         foodMeal.setQuantity(quantity);
         foodMealRepository.save(foodMeal);
         return foodMeal;

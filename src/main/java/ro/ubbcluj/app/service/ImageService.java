@@ -23,7 +23,8 @@ import java.util.*;
 
 @Service
 public class ImageService {
-    private final String IMAGE_URL = "http://localhost:5000/image";
+    @Value(value = "${python.server.api}")
+    private String PYTHON_API;
     @Value(value = "${image.api.key}")
     private String IMAGE_API_KEY;
 
@@ -36,7 +37,7 @@ public class ImageService {
             map.put("content", bytesToJsonArray(imageBytes));
             JSONObject jsonObject = new JSONObject(map);
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(IMAGE_URL))
+                    .uri(URI.create(PYTHON_API))
                     .header("Content-Type", "application/json")
                     .header("X-Api-Key", IMAGE_API_KEY)
                     .POST(HttpRequest.BodyPublishers.ofString(String.valueOf(jsonObject)))
@@ -71,7 +72,7 @@ public class ImageService {
         return base64Image;
     }
 
-    private static OverlayCategoryDTO parseImageResponseToOverlay(String jsonToParse) {
+    private OverlayCategoryDTO parseImageResponseToOverlay(String jsonToParse) {
         OverlayCategoryDTO dto = new OverlayCategoryDTO();
         JSONObject json = new JSONObject(jsonToParse);
         Gson gson = new Gson();
@@ -105,7 +106,7 @@ public class ImageService {
         return dto;
     }
 
-    private static String bytesToJsonArray(byte[] bytes) {
+    private String bytesToJsonArray(byte[] bytes) {
         StringBuilder builder = new StringBuilder("[");
         for (int i = 0; i < bytes.length; i++) {
             builder.append(bytes[i]);
