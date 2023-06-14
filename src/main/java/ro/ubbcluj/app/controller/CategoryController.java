@@ -18,6 +18,7 @@ public class CategoryController {
     private String IMAGE_API_KEY;
     @Value(value = "${python.server.api}")
     private String PYTHON_API;
+
     @GetMapping()
     public String getCategories() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()

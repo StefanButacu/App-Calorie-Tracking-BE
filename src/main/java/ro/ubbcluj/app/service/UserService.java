@@ -1,6 +1,5 @@
 package ro.ubbcluj.app.service;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ro.ubbcluj.app.domain.CalorieValue;
@@ -18,16 +17,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
-    @Value(value = "${fitness.api.key}")
-    private String FITNESS_API_KEY;
-
-    @Value(value = "${fitness.api.host}")
-    private String FITNESS_API_HOST;
-
-    @Value(value = "${fitness.api.url}")
-    private String FITNESS_API_URL;
     private final DietPlanDTO DEFAULT_DIET_PLAN = new DietPlanDTO(2000.0, 137.0, 137.0, 100.0);
-    
+
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;

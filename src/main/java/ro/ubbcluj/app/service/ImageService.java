@@ -37,7 +37,7 @@ public class ImageService {
             map.put("content", bytesToJsonArray(imageBytes));
             JSONObject jsonObject = new JSONObject(map);
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(PYTHON_API))
+                    .uri(URI.create(PYTHON_API + "/image"))
                     .header("Content-Type", "application/json")
                     .header("X-Api-Key", IMAGE_API_KEY)
                     .POST(HttpRequest.BodyPublishers.ofString(String.valueOf(jsonObject)))
@@ -76,12 +76,13 @@ public class ImageService {
         OverlayCategoryDTO dto = new OverlayCategoryDTO();
         JSONObject json = new JSONObject(jsonToParse);
         Gson gson = new Gson();
-        Type type = new TypeToken<LinkedHashMap<String, ArrayList<Integer>>>(){}.getType();
+        Type type = new TypeToken<LinkedHashMap<String, ArrayList<Integer>>>() {
+        }.getType();
         String innerJsonString = json.getString("color_map");
         Map<String, ArrayList<Integer>> colorJsonMap = gson.fromJson(innerJsonString, type);
 
         Map<Integer, List<Integer>> colorLabels = new LinkedHashMap<>();
-        for(Map.Entry<String, ArrayList<Integer>> entry: colorJsonMap.entrySet()){
+        for (Map.Entry<String, ArrayList<Integer>> entry : colorJsonMap.entrySet()) {
             List<Integer> rgbPixel = entry.getValue();
             colorLabels.put(Integer.parseInt(entry.getKey()), rgbPixel);
         }
