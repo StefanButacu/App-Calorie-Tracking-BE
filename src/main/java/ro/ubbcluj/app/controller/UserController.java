@@ -57,7 +57,7 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PostMapping()
+    @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserRegisterRequestDTO userRegisterRequestDTO) {
         User user = userService.registerUser(userRegisterRequestDTO);
         if (user == null) {
@@ -65,13 +65,6 @@ public class UserController {
         }
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
-
-
-//    @PostMapping("/register/goals")
-//    public ResponseEntity<?> updateUserGoal(@RequestBody UserFitnessRequestDTO userFitnessRequestDTO) {
-//        userService.requestUserDietPlan(userFitnessRequestDTO);
-//        return null;
-//    }
 
     @GetMapping("/register/activity-levels")
     public ResponseEntity<List<EnumDTO>> getAllActivityLevels() {

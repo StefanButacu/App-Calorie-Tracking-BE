@@ -7,6 +7,4 @@ import ro.ubbcluj.app.domain.Meal;
 @Repository
 public interface MealRepository extends JpaRepository<Meal, Long> {
 
-//    List<Meal> getMealsFromDiary(@Param("diaryDayId") Long diaryDayId);
-
 }
